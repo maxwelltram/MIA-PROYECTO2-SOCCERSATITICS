@@ -1,3 +1,10 @@
+CREATE SEQUENCE TEST_ID_SEQ
+INCREMENT BY 1
+START WITH 1
+MAXVALUE 999999999
+NOCYCLE
+NOCACHE;
+
 create table usuarios(
     id number Not null primary key,
     nombres varchar(50) not null,
