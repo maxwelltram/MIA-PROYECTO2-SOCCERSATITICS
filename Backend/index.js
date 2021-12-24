@@ -1,27 +1,51 @@
 const express = require("express");
-const XLSX = require('xlsx');
-const bodyparser= require('body-parser');
-const oracledb = require('oracledb');
+const XLSX = require('xlsx'); //instalar paquete npm install xlsx
+const bodyparser= require('body-parser'); //instalar paquete npm install body-parser
+const oracledb = require('oracledb'); //instalar paquete npm install oracledb y oracle-instantclient-basic-21.4.0.0.0-1.el8.x86_64.rpm
+const JSONTransport = require("nodemailer/lib/json-transport");
+const { outFormat } = require("oracledb");
+const cors = require('cors');
+const nodemailer = require("nodemailer");
 const app = express();
 
-async function run() {
-    let connection = await oracledb.getConnection( {
-    user : "proyecto",
-    password : "1234",
-    connectString : "localhost:1521/ORCL18" // [hostname]:[port]/[DB service name]
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: 'soccerstatsmia2021@gmail.com', // soccerstatsmia2021@gmail.com
+      pass: 'joipimudexvfunej', // mia987654321  joipimudexvfunej
+    },
   });
-  let result = await connection.execute( "SELECT * FROM tipousuario");
-  console.log(result.rows[0]);
-} 
+
+  transporter.verify().then(()=>{
+      console.log("Listos para enviar");
+  });
+  
+let connection = {
+    user: "proyecto",
+    password: "1234",
+    connectString : "172.17.0.2/ORCL18"};
 
 app.use(bodyparser.urlencoded({
     extended: true
 }));
 
+
+async function enviar (){
+    let info = await transporter.sendMail({
+        from: '"Fred Foo 👻" <soccerstatsmia2021@gmail.com>', // sender address
+        to: "bryanpaez.125@gmail.com", // list of receivers
+        subject: "Hello ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: "<b>Hello world?</b>", // html body
+      });
+}
+
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
-    run();
-    
+    enviar();
+    consultaSelect();
 })
 
 app.post("/cargarEstadios", (req,  res) =>{ 
@@ -42,7 +66,7 @@ app.post("/cargarEstadios", (req,  res) =>{
         console.log(cadenaJson);
         ruta = cadenaJson['ruta'];
         console.log(ruta);
-        cargarArchivo(ruta);
+        insertarDatos(cargarArchivo(ruta));
         res.end();
     })
 
@@ -66,8 +90,8 @@ app.post("/cargarPartidoIncidencia", (req,  res) =>{
 })
 
 app.listen(3000, ()=>(
-    console.log("servidor corriendo en el puerto",3000)
-    //cargarArchivo("archivo.xlsx")
+    console.log("servidor corriendo en el puerto",3000),
+    cargarArchivo("archivoEstadios.xlsx")
 ));
 
 function cargarArchivo(ruta){
@@ -79,7 +103,58 @@ function cargarArchivo(ruta){
         console.log(itemFile)
     }
     console.log(libroSheets);
+    return data;
 }
+
+ async function insertarDatos(datos){
+    
+        oracledb.getConnection(connection,  function (err, connection) {
+            if (err) {
+                // Error connecting to DB
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error connecting to DB",
+                    detailed_message: err.message
+                }));
+                return;
+            }
+
+                connection.execute("insert into pais values(3, 'wakanda2')" ,{autoCommit:true},{
+                    outFormat: oracledb.OBJECT 
+                }, function (err, result) {
+                    if (err) {
+                        console.error("error");
+
+                    } else {
+                        connection.release(
+                            function (err) {
+                                if (err) {
+                                    console.error(err.message);
+    
+                                } else {
+                                    console.log("POST /sendTablespace : Connection released1");
+    
+                                }
+                            });
+                    }
+                    // Release the connection
+                    
+                });
+            
+
+
+        
+
+            
+        });
+
+
+
+    
+}
+
+
 
 
 function numeroAFecha(numeroDeDias, esExcel = false) {
@@ -89,14 +164,117 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
     return new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);
   }
   
-  app.get('/users', function (req, res) {
-    "use strict";
+ 
 
-    oracledb.getConnection({
-        user: "proyecto",
-        password: "1234",
-        connectString : "172.17.0.2/ORCL18"
-    }, function (err, connection) {
+
+function consultaSelectUser(){
+    oracledb.getConnection(connection, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("SELECT * FROM usuarios", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                if(result.rows=[]){
+                    console.log("nulo")
+                }
+                console.log(result.rows);
+            }
+            
+        });
+    });
+
+}
+
+async function consultaSelectPais(nombre) {
+    oracledb.getConnection(connection, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("SELECT id FROM pais where nombre='Wakanda'", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                if(result.rows[0].ID){
+
+                    console.log("nulo!")
+                    return 0;
+                }
+
+                console.log(result)
+                return result.rows[0].ID;
+
+            }
+            
+        });
+    });
+}
+function consultaSelectGenero(){
+    oracledb.getConnection(connection, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("SELECT * FROM pais", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                if(result.rows=[]){
+                    console.log("nulo")
+                }
+                console.log(result.rows);
+            }
+            
+        });
+    });
+
+}
+  
+
+function consultaSelectGenero(){
+    oracledb.getConnection(connection, function (err, connection) {
         if (err) {
             // Error connecting to DB
             res.set('Content-Type', 'application/json');
@@ -118,26 +296,13 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
                     detailed_message: err.message
                 }));
             } else {
-                res.header('Access-Control-Allow-Origin','*');
-                res.header('Access-Control-Allow-Headers','Content-Type');
-                res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS');
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify(result.rows));
-				
+                if(result.rows=[]){
+                    console.log("nulo")
+                }
+                console.log(result.rows);
             }
-            // Release the connection
-            connection.release(
-                function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    } else {
-                        console.log("GET /sendTablespace : Connection released");
-                    }
-                });
+            
         });
     });
-});
 
-
-
-  
+}

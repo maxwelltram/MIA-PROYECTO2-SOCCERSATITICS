@@ -48,7 +48,7 @@ create table directort(
     fecha_nacimiento date not null,
     pais number not null,
     estado varchar(150) not null,
-    foto varchar(50) not null
+    foto varchar(50) null
 );
 
 create table estadio(
@@ -76,7 +76,7 @@ create table equipo(
     nombres varchar(50) not null,   
     fecha_fundacion date not null,
     pais number not null,
-    foto varchar(50) not null
+    foto varchar(50) null
 );
 
 
