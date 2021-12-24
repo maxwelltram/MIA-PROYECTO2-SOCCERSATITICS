@@ -5,7 +5,7 @@ const oracledb = require('oracledb'); //instalar paquete npm install oracledb y 
 const JSONTransport = require("nodemailer/lib/json-transport");
 const { outFormat } = require("oracledb");
 const cors = require('cors');
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");//instalar paquete npm install nodemailer
 const app = express();
 
 let transporter = nodemailer.createTransport({
@@ -21,7 +21,7 @@ let transporter = nodemailer.createTransport({
   transporter.verify().then(()=>{
       console.log("Listos para enviar");
   });
-  
+
 let connection = {
     user: "proyecto",
     password: "1234",
@@ -34,18 +34,17 @@ app.use(bodyparser.urlencoded({
 
 async function enviar (){
     let info = await transporter.sendMail({
-        from: '"Fred Foo 👻" <soccerstatsmia2021@gmail.com>', // sender address
+        from: '"Soccer Statics" <soccerstatsmia2021@gmail.com>', // sender address
         to: "bryanpaez.125@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
+        subject: "Comprobacion de email", // Subject line
+        text: "Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt", // plain text body
+        html: "<b>Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt</b>", // html body
       });
 }
 
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
     enviar();
-    consultaSelect();
 })
 
 app.post("/cargarEstadios", (req,  res) =>{ 
