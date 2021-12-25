@@ -98,14 +98,14 @@ function cargarArchivo(ruta){
     const libroSheets = libro.SheetNames;
     const sheet = libroSheets[0];
     const data = XLSX.utils.sheet_to_json(libro.Sheets[sheet]);
-    for(const itemFile of data){
-        console.log(itemFile)
-    }
+    
     console.log(libroSheets);
     return data;
 }
 
  async function insertarDatos(datos){
+    for(const itemFile of datos){
+        //console.log(itemFile)
     
         oracledb.getConnection(connection,  function (err, connection) {
             if (err) {
@@ -118,28 +118,36 @@ function cargarArchivo(ruta){
                 }));
                 return;
             }
+            let pais = consultaSelectPais(itemFile["Pais"]);
+            console.log(consultaSelectPais(itemFile["Pais"]))
 
-                connection.execute("insert into pais values(3, 'wakanda2')" ,{autoCommit:true},{
-                    outFormat: oracledb.OBJECT 
-                }, function (err, result) {
-                    if (err) {
-                        console.error("error");
+            //if (pais==undefined){pais=0}
+            //console.log(pais)
 
-                    } else {
-                        connection.release(
-                            function (err) {
-                                if (err) {
-                                    console.error(err.message);
+                if (pais==0){
+                    connection.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Pais"]+"')",{},{autoCommit:true}, 
+                    function (err, result) {
+                        if (err) {
+                            console.error(err.message);
     
-                                } else {
-                                    console.log("POST /sendTablespace : Connection released1");
-    
-                                }
-                            });
-                    }
-                    // Release the connection
-                    
-                });
+                        } else {
+                            connection.release(
+                                function (err) {
+                                    if (err) {
+                                        console.error(err.message);
+        
+                                    } else {
+                                        console.log("POST /sendTablespace : Connection released1");
+        
+                                    }
+                                });
+                        }
+                        // Release the connection
+                        
+                    });
+                }
+                //pais = consultaSelectPais(itemFile["Pais"]);
+                console.log(pais)
             
 
 
@@ -148,7 +156,7 @@ function cargarArchivo(ruta){
             
         });
 
-
+    }
 
     
 }
@@ -199,8 +207,9 @@ function consultaSelectUser(){
     });
 
 }
-
-async function consultaSelectPais(nombre) {
+var id = 0;
+function  consultaSelectPais(nombre) {
+    var retorno1=0;
     oracledb.getConnection(connection, function (err, connection) {
         if (err) {
             // Error connecting to DB
@@ -212,30 +221,34 @@ async function consultaSelectPais(nombre) {
             }));
             return;
         }
-        connection.execute("SELECT id FROM pais where nombre='Wakanda'", {}, {
+        connection.execute("SELECT id FROM pais where nombre='"+nombre+"'", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
+            var retorno=0;
             if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
             } else {
-                if(result.rows[0].ID){
+                try {
+                    console.log(result.rows[0].ID);
+                    retorno=result.rows[0].ID;
+                    id = retorno
 
-                    console.log("nulo!")
-                    return 0;
-                }
+                } catch (error) {
+                    id = retorno
+                    console.log(retorno)   ;  
 
-                console.log(result)
-                return result.rows[0].ID;
+                }     
+                
 
+                
             }
-            
         });
+        
+
     });
+    retorno1=id;
+        console.log("retorno1 2 " + retorno1)
+
+    return retorno1;
 }
 function consultaSelectGenero(){
     oracledb.getConnection(connection, function (err, connection) {
