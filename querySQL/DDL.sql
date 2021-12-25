@@ -1,3 +1,10 @@
+CREATE SEQUENCE TEST_ID_SEQ
+INCREMENT BY 1
+START WITH 1
+MAXVALUE 999999999
+NOCYCLE
+NOCACHE;
+
 create table usuarios(
     id number Not null primary key,
     nombres varchar(50) not null,
@@ -41,7 +48,7 @@ create table directort(
     fecha_nacimiento date not null,
     pais number not null,
     estado varchar(150) not null,
-    foto varchar(50) not null
+    foto varchar(50) null
 );
 
 create table estadio(
@@ -69,7 +76,7 @@ create table equipo(
     nombres varchar(50) not null,   
     fecha_fundacion date not null,
     pais number not null,
-    foto varchar(50) not null
+    foto varchar(50) null
 );
 
 
