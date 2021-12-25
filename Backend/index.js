@@ -65,7 +65,7 @@ app.post("/cargarEstadios", (req,  res) =>{
         console.log(cadenaJson);
         ruta = cadenaJson['ruta'];
         console.log(ruta);
-        insertarDatos(cargarArchivo(ruta));
+        insertarEstadios(cargarArchivo(ruta));
         res.end();
     })
 
@@ -102,63 +102,66 @@ function cargarArchivo(ruta){
     console.log(libroSheets);
     return data;
 }
+global.id=0;
 
- async function insertarDatos(datos){
+
+
+
+async  function insertarEstadios(datos){
     for(const itemFile of datos){
-        //console.log(itemFile)
+        let conn
+        var pais=0;
+      try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute(
+          "SELECT id FROM pais where nombre='"+itemFile["Pais"]+"'"
+        )
+        console.log("aqui")
+        console.log(result.rows[0])
+        global.id = result.rows[0]
+        pais = result.rows[0]    
+      } catch (err) {
+        console.log('Ouch!', err)
+      } finally {
+        if (conn) {
+          await conn.close()
+        }
+      }
+        
+    if(pais == undefined){
+        try {
+            conn = await oracledb.getConnection(connection)
+        
+            const result = await conn.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Pais"]+"')",{},{autoCommit:true})
+            console.log('Wow! Si inserte!')
     
-        oracledb.getConnection(connection,  function (err, connection) {
-            if (err) {
-                // Error connecting to DB
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error connecting to DB",
-                    detailed_message: err.message
-                }));
-                return;
+          } catch (err) {
+            console.log('Ouch! No inserte!')
+          } finally {
+            if (conn) { 
+              await conn.close()
             }
-            let pais = consultaSelectPais(itemFile["Pais"]);
-            console.log(consultaSelectPais(itemFile["Pais"]))
+          }
+    }
+      
 
-            //if (pais==undefined){pais=0}
-            //console.log(pais)
-
-                if (pais==0){
-                    connection.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Pais"]+"')",{},{autoCommit:true}, 
-                    function (err, result) {
-                        if (err) {
-                            console.error(err.message);
+    //insertar estadios
+    try {
+        conn = await oracledb.getConnection(connection)
     
-                        } else {
-                            connection.release(
-                                function (err) {
-                                    if (err) {
-                                        console.error(err.message);
-        
-                                    } else {
-                                        console.log("POST /sendTablespace : Connection released1");
-        
-                                    }
-                                });
-                        }
-                        // Release the connection
-                        
-                    });
-                }
-                //pais = consultaSelectPais(itemFile["Pais"]);
-                console.log(pais)
-            
+        const result = await conn.execute("INSERT INTO estadio VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_ing"], true)+"','DD/MM/YY') ,"+itemFile["Capacidad"]+" ,"+pais+" ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
+        console.log('Wow! Si inserte!')
 
-
-        
-
-            
-        });
-
+      } catch (err) {
+        console.log('Ouch! No inserte! estadio', err)
+      } finally {
+        if (conn) { 
+          await conn.close()
+        }
+      }
     }
 
-    
+
 }
 
 
@@ -166,13 +169,13 @@ function cargarArchivo(ruta){
 
 function numeroAFecha(numeroDeDias, esExcel = false) {
     var diasDesde1900 = esExcel ? 25567 + 2 : 25567;
-  
-    // 86400 es el número de segundos en un día, luego multiplicamos por 1000 para obtener milisegundos.
-    return new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);
-  }
-  
- 
+    fecha=new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);
+    fecha.outFormat
+    console.log(fecha.toLocaleDateString());
 
+    // 86400 es el número de segundos en un día, luego multiplicamos por 1000 para obtener milisegundos.
+    return fecha.toLocaleDateString();
+  }
 
 function consultaSelectUser(){
     oracledb.getConnection(connection, function (err, connection) {
@@ -207,83 +210,7 @@ function consultaSelectUser(){
     });
 
 }
-var id = 0;
-function  consultaSelectPais(nombre) {
-    var retorno1=0;
-    oracledb.getConnection(connection, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute("SELECT id FROM pais where nombre='"+nombre+"'", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            var retorno=0;
-            if (err) {
-            } else {
-                try {
-                    console.log(result.rows[0].ID);
-                    retorno=result.rows[0].ID;
-                    id = retorno
 
-                } catch (error) {
-                    id = retorno
-                    console.log(retorno)   ;  
-
-                }     
-                
-
-                
-            }
-        });
-        
-
-    });
-    retorno1=id;
-        console.log("retorno1 2 " + retorno1)
-
-    return retorno1;
-}
-function consultaSelectGenero(){
-    oracledb.getConnection(connection, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute("SELECT * FROM pais", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
-            } else {
-                if(result.rows=[]){
-                    console.log("nulo")
-                }
-                console.log(result.rows);
-            }
-            
-        });
-    });
-
-}
-  
 
 function consultaSelectGenero(){
     oracledb.getConnection(connection, function (err, connection) {
