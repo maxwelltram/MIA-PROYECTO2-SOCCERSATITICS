@@ -68,7 +68,7 @@ create table jugador(
     fecha_nacimiento date not null,
     pais number not null,
     posicion number not null,
-    estado varchar(150) not null
+    estado varchar(150) null
 );
 
 create table equipo(

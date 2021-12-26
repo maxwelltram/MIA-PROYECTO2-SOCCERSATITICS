@@ -122,9 +122,32 @@ app.post("/cargarEquipos", (req,  res) =>{
 
     var fecha = numeroAFecha(4606, true);
     console.log(fecha);})
+
+
 app.post("/cargarJugadores", (req,  res) =>{ 
-    res.send("Cargar Jugadores")
-})
+    var body='';
+    var ruta;
+    var cadenaJson;
+    res.send("Cargar Jugadores");
+    req.on('data', data =>{
+        body+=data;
+
+    });
+
+    req.on('end', ()=>{
+        console.log(body);
+        res.statusCode=200;
+        //res.setHeader('Content-Type', 'application/json');
+        cadenaJson= JSON.parse(body);
+        console.log(cadenaJson);
+        ruta = cadenaJson['ruta'];
+        console.log(ruta);
+        insertarJugadores(cargarArchivo(ruta));
+        res.end();
+    })
+
+    var fecha = numeroAFecha(4606, true);
+    console.log(fecha);})
 app.post("/cargarCompeticiones", (req,  res) =>{ 
     res.send("Cargar Competiciones")
 })
@@ -185,6 +208,23 @@ async  function insertarEstadios(datos){
               await conn.close()
             }
           }
+    }
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM pais where nombre='"+itemFile["Pais"]+"'"
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      global.id = result.rows[0]
+      pais = result.rows[0]    
+    } catch (err) {
+      console.log('Ouch!', err)
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
     }
       
 
@@ -250,6 +290,22 @@ async  function insertarDirectores(datos){
           }
     }
 
+    try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute(
+          "SELECT id FROM pais where nombre='"+itemFile["Pais"]+"'"
+        )
+        console.log("aqui")
+        console.log(result.rows[0])
+        global.id = result.rows[0]
+        pais = result.rows[0]    
+      } catch (err) {
+        console.log('Ouch!', err)
+      } finally {
+        if (conn) {
+          await conn.close()
+        }
+      }
 
     try {
       conn = await oracledb.getConnection(connection)
@@ -401,6 +457,26 @@ async  function insertarEquipos(datos){
             }
           }
     }
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM pais where nombre='"+itemFile["Pais"]+"'"
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      global.id = result.rows[0]
+      pais = result.rows[0]    
+    } catch (err) {
+      console.log('Ouch!', err)
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+
+
+
       //consultar si ya existe el equipo
     try {
         conn = await oracledb.getConnection(connection)
@@ -439,6 +515,233 @@ async  function insertarEquipos(datos){
         }
     }
     
+
+
+}
+
+
+async  function insertarJugadores(datos){
+  for(const itemFile of datos){
+      let conn
+      var pais=0;
+      var paisEquipo=0;
+      var existe = false;
+      var existeJug = false;
+      var jugador = 0;
+      var equipo = 0;
+      var posicion
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM pais where nombre='"+itemFile["Nacionalidad"]+"'"
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      pais = result.rows[0]    
+    } catch (err) {
+      console.log('Ouch! consulta pais1', err)
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+      
+  if(pais == undefined){
+      try {
+          conn = await oracledb.getConnection(connection)
+      
+          const result = await conn.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nacionalidad"]+"')",{},{autoCommit:true})
+          console.log('Wow! Si inserte!')
+  
+        } catch (err) {
+          console.log('Ouch! No inserte!')
+        } finally {
+          if (conn) { 
+            await conn.close()
+          }
+        }
+  }
+
+  try {
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(
+      "SELECT id FROM pais where nombre='"+itemFile["Nacionalidad"]+"'"
+    )
+    console.log("aqui")
+    console.log(result.rows[0])
+    global.id = result.rows[0]
+    pais = result.rows[0]    
+  } catch (err) {
+    console.log('Ouch! consulta pais ', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+
+  //consultar posicion
+  try {
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(
+      "SELECT id FROM posicion where nombre='"+itemFile["Posicion"]+"'"
+    )
+    console.log("aqui")
+    console.log(result.rows[0])
+    posicion = result.rows[0]    
+  } catch (err) {
+    console.log('Ouch! Posicion1', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+
+//insertar posicion si no existe 
+  if(posicion == undefined){
+    try {
+        conn = await oracledb.getConnection(connection)
+    
+        const result = await conn.execute("INSERT INTO posicion VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Posicion"]+"')",{},{autoCommit:true})
+        console.log('Wow! Si inserte!')
+
+      } catch (err) {
+        console.log('Ouch! No inserte!')
+      } finally {
+        if (conn) { 
+          await conn.close()
+        }
+      }
+  }
+  try {
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(
+      "SELECT id FROM posicion where nombre='"+itemFile["Posicion"]+"'"
+    )
+    console.log("aqui")
+    console.log(result.rows[0])
+    posicion = result.rows[0]    
+  } catch (err) {
+    console.log('Ouch! Posicion2', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+
+
+  try {
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(
+      "SELECT id FROM pais where nombre='"+itemFile["Pais_Equipo"]+"'"
+    )
+    console.log("aqui")
+    console.log(result.rows[0])
+    paisEquipo = result.rows[0]    
+  } catch (err) {
+    console.log('Ouch! pais equipo', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+    //consultar si ya existe el equipo
+  try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM equipo where nombres='"+itemFile["Equipo"]+"' and pais="+paisEquipo
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      if(result.rows[0]!=undefined){
+        existe = true;  
+        equipo = result.rows[0];
+      }
+    } catch (err) {
+      console.log('Ouch! consulta equipo', err)
+      console.log(itemFile["Equipo"])
+      console.log(paisEquipo)
+      existe = true;
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+
+    //consultar si existe el jugador
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      if(result.rows[0]!=undefined){
+        existeJug = true;  
+      }
+    } catch (err) {
+      console.log('Ouch! select jugador1', err)
+      console.log(pais)
+
+      existeJug = true;
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+  //insertar director 
+
+  if(!existeJug){
+    try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute("INSERT INTO jugador VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY') ,"+pais+","+posicion+", null )",{},{autoCommit:true})
+        console.log('Wow! Si inserte!')
+    }catch (err) {
+        console.log('Ouch! No inserte! Jugador', err)
+    }finally {
+        if (conn) { 
+            await conn.close()
+         }
+      }
+  }else{
+  }
+  // id del director
+  try {
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(
+      "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+    )
+    console.log("aqui")
+    console.log(result.rows[0])
+    jugador = result.rows[0]
+  } catch (err) {
+    console.log('Ouch! select jugador', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+  //insertar participacion 
+  if(existe){
+    try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute("INSERT INTO participante VALUES (TEST_ID_SEQ.nextval, "+jugador+","+equipo+", TO_DATE('"+numeroAFecha(itemFile["Fecha_Ini"], true)+"','DD/MM/YYYY') ,TO_DATE('"+numeroAFecha(itemFile["Fecha_Fin"], true)+"','DD/MM/YYYY') )",{},{autoCommit:true})
+        console.log('Wow! Si inserte!')
+    }catch (err) {
+        console.log('Ouch! No inserte! Participante', err)
+        console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
+    }finally {
+        if (conn) { 
+            await conn.close()
+         }
+      }
+  }
+
+
+  }
+  
+
 
 
 }
