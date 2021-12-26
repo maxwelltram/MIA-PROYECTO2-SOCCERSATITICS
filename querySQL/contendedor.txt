@@ -1,0 +1,3 @@
+ejecutar contenedor pc Paez
+sudo docker start ab446130fe2f
+sudo docker exec -it  ab446130fe2f bash
