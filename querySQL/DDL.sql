@@ -94,7 +94,17 @@ create table partido(
 create table participante(
     id number not null primary key,
     jugador number not null,
-    equipo number not null
+    equipo number not null,
+    fecha_in date not null,
+    fecha_fin date null
+);
+
+create table direccion(
+    id number not null primary key,
+    directort number not null,
+    equipo number not null,
+    fecha_in date not null,
+    fecha_fin date null
 );
 
 create table incidencia(
@@ -139,7 +149,7 @@ create table competencia(
     tipo varchar(20) not null,
     campeon number not null,
     pais number not null
-)
+);
 
 create table tarjeta(
     id number not null primary key,
@@ -246,3 +256,11 @@ ALTER TABLE usuario
 ALTER TABLE usuario
     ADD CONSTRAINT usuario_tipousuario_fk FOREIGN KEY (tipousuario)
         REFERENCES tipousuario (id);
+
+ALTER TABLE direccion
+    ADD CONSTRAINT direccion_directort_fk FOREIGN KEY (directort)
+        REFERENCES directort ( id );
+
+ALTER TABLE direccion
+    ADD CONSTRAINT direccion_equipo_fk FOREIGN KEY (equipo)
+        REFERENCES equipo ( id );
