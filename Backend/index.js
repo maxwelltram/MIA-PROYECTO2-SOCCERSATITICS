@@ -73,8 +73,31 @@ app.post("/cargarEstadios", (req,  res) =>{
     console.log(fecha);
 })
 app.post("/cargarDirectores", (req,  res) =>{ 
-    res.send("Cargar Directores");
-})
+  var body='';
+  var ruta;
+  var cadenaJson;
+  res.send("Cargar Directores");
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+      console.log(body);
+      res.statusCode=200;
+      //res.setHeader('Content-Type', 'application/json');
+      cadenaJson= JSON.parse(body);
+      console.log(cadenaJson);
+      ruta = cadenaJson['ruta'];
+      console.log(ruta);
+      insertarDirectores(cargarArchivo(ruta));
+      res.end();
+  })
+
+  var fecha = numeroAFecha(4606, true);
+  console.log(fecha);})
+
+
 app.post("/cargarEquipos", (req,  res) =>{ 
     var body='';
     var ruta;
@@ -123,7 +146,6 @@ function cargarArchivo(ruta){
     console.log(libroSheets);
     return data;
 }
-global.id=0;
 
 
 
@@ -170,7 +192,7 @@ async  function insertarEstadios(datos){
     try {
         conn = await oracledb.getConnection(connection)
     
-        const result = await conn.execute("INSERT INTO estadio VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_ing"], true)+"','DD/MM/YY') ,"+itemFile["Capacidad"]+" ,"+pais+" ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO estadio VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_ing"], true)+"','DD/MM/YYYY') ,"+itemFile["Capacidad"]+" ,"+pais+" ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
 
       } catch (err) {
@@ -189,6 +211,13 @@ async  function insertarDirectores(datos){
     for(const itemFile of datos){
         let conn
         var pais=0;
+        var paisEquipo=0;
+        var existe = false;
+        var existeDir = false;
+        var director = 0;
+        var equipo = 0;
+
+        console.log(itemFile["Fecha_Fin"]);
       try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute(
@@ -196,7 +225,6 @@ async  function insertarDirectores(datos){
         )
         console.log("aqui")
         console.log(result.rows[0])
-        global.id = result.rows[0]
         pais = result.rows[0]    
       } catch (err) {
         console.log('Ouch!', err)
@@ -221,23 +249,116 @@ async  function insertarDirectores(datos){
             }
           }
     }
-      
 
-    //insertar directores
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM pais where nombre='"+itemFile["Pais_Equipo"]+"'"
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      paisEquipo = result.rows[0]    
+    } catch (err) {
+      console.log('Ouch!', err)
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+      //consultar si ya existe el equipo
     try {
         conn = await oracledb.getConnection(connection)
-    
-        const result = await conn.execute("INSERT INTO directort VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombres"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YY') ,"+pais+" ,'"+itemFile["Estado"]+"' ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
-        console.log('Wow! Si inserte!')
-
+        const result = await conn.execute(
+          "SELECT id FROM equipo where nombres='"+itemFile["Equipo"]+"' and pais="+paisEquipo
+        )
+        console.log("aqui")
+        console.log(result.rows[0])
+        if(result.rows[0]!=undefined){
+          existe = true;  
+          equipo = result.rows[0];
+        }
       } catch (err) {
-        console.log('Ouch! No inserte! estadio', err)
+        console.log('Ouch!', err)
+        existe = true;
       } finally {
-        if (conn) { 
+        if (conn) {
           await conn.close()
         }
       }
+
+      //consultar si existe director
+
+      try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute(
+          "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+        )
+        console.log("aqui")
+        console.log(result.rows[0])
+        if(result.rows[0]!=undefined){
+          existeDir = true;  
+        }
+      } catch (err) {
+        console.log('Ouch!', err)
+        existeDir = true;
+      } finally {
+        if (conn) {
+          await conn.close()
+        }
+      }
+    //insertar director 
+
+    if(!existeDir){
+      try {
+          conn = await oracledb.getConnection(connection)
+          const result = await conn.execute("INSERT INTO directort VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombres"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY') ,"+pais+", '"+itemFile["Estado"]+"', null )",{},{autoCommit:true})
+          console.log('Wow! Si inserte!')
+      }catch (err) {
+          console.log('Ouch! No inserte! Director', err)
+      }finally {
+          if (conn) { 
+              await conn.close()
+           }
+        }
+    }else{
     }
+    // id del director
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      director = result.rows[0]
+    } catch (err) {
+      console.log('Ouch!', err)
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+    //insertar direccion 
+    if(existe){
+      try {
+          conn = await oracledb.getConnection(connection)
+          const result = await conn.execute("INSERT INTO direccion VALUES (TEST_ID_SEQ.nextval, "+director+","+equipo+", TO_DATE('"+numeroAFecha(itemFile["Fecha_Ini"], true)+"','DD/MM/YYYY') ,TO_DATE('"+numeroAFecha(itemFile["Fecha_Fin"], true)+"','DD/MM/YYYY') )",{},{autoCommit:true})
+          console.log('Wow! Si inserte!')
+      }catch (err) {
+          console.log('Ouch! No inserte! direccion', err)
+          console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
+      }finally {
+          if (conn) { 
+              await conn.close()
+           }
+        }
+    }
+
+
+    }
+    
+
 
 
 }
@@ -284,25 +405,28 @@ async  function insertarEquipos(datos){
     try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute(
-          "SELECT id FROM equipo JOIN pais where nombre='"+itemFile["Nombre"]+"' and equipo.pais="+pais
+          "SELECT id FROM equipo where nombres='"+itemFile["Nombre"]+"' and pais="+pais
         )
         console.log("aqui")
         console.log(result.rows[0])
-        existe = true;  
+        if(result.rows[0]!=undefined){
+          existe = true;  
+        }
       } catch (err) {
         console.log('Ouch!', err)
+        existe = true;
       } finally {
         if (conn) {
           await conn.close()
         }
       }
-    //insertar estadios
+    //insertar equipos 
 
     if(!existe){
         try {
             conn = await oracledb.getConnection(connection)
         
-            const result = await conn.execute("INSERT INTO equipo VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Fun"], true)+"','DD/MM/YY') ,"+pais+", null )",{},{autoCommit:true})
+            const result = await conn.execute("INSERT INTO equipo VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Fun"], true)+"','DD/MM/YYYY') ,"+pais+", null )",{},{autoCommit:true})
             console.log('Wow! Si inserte!')
     
           } catch (err) {
@@ -321,12 +445,14 @@ async  function insertarEquipos(datos){
 
 
 function numeroAFecha(numeroDeDias, esExcel = false) {
+    if(numeroDeDias==undefined){
+      return "";
+    }
     var diasDesde1900 = esExcel ? 25567 + 2 : 25567;
     fecha=new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);
     fecha.outFormat
     console.log(fecha.toLocaleDateString());
-
-    // 86400 es el número de segundos en un día, luego multiplicamos por 1000 para obtener milisegundos.
+    
     return fecha.toLocaleDateString();
   }
 

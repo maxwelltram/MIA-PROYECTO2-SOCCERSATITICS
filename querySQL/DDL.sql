@@ -245,16 +245,16 @@ ALTER TABLE tirolibre
     ADD CONSTRAINT tirolibre_gol_fk FOREIGN KEY (gol)
         REFERENCES gol (id);
 
-ALTER TABLE usuario
+ALTER TABLE usuarios
     ADD CONSTRAINT usuario_genero_fk FOREIGN KEY (genero)
         REFERENCES genero (id);
 
-ALTER TABLE usuario
+ALTER TABLE usuarios
     ADD CONSTRAINT usuario_pais_fk FOREIGN KEY (pais)
         REFERENCES pais (id);
 
-ALTER TABLE usuario
-    ADD CONSTRAINT usuario_tipousuario_fk FOREIGN KEY (tipousuario)
+ALTER TABLE usuarios
+    ADD CONSTRAINT usuario_tipousuario_fk FOREIGN KEY (tipo)
         REFERENCES tipousuario (id);
 
 ALTER TABLE direccion
