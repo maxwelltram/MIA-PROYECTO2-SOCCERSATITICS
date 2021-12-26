@@ -5,11 +5,19 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './registrar.component.html',
   styleUrls: ['./registrar.component.css']
 })
-export class RegistrarComponent implements OnInit {
+export class RegistrarComponent {
 
   constructor() { }
 
-  ngOnInit(): void {
+  NuevoUsuario ={
+    nombre:'',
+    apellido:'',
+    email:'',
+    password:''
+  }
+
+  Registrar(){
+    console.log(this.NuevoUsuario);
   }
 
 }

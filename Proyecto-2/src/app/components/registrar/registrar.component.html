@@ -8,6 +8,7 @@
       name="nombre"
       placeholder="Nombre"
       required="required"
+      [(ngModel)]="NuevoUsuario.nombre"
     />
     <input
     type="Apellido"
@@ -15,6 +16,9 @@
     name="Apellido"
     placeholder="Apellido"
     required="required"
+    [(ngModel)]="NuevoUsuario.apellido"
+
+
   />
 
       <input
@@ -23,6 +27,8 @@
         name="email"
         placeholder="Email"
         required="required"
+      [(ngModel)]="NuevoUsuario.email"
+
       />
 
       <input
@@ -31,8 +37,10 @@
       name="password"
       placeholder="Password"
       required="required"
+      [(ngModel)]="NuevoUsuario.password"
+
     />
 
-      <button type="submit" >Registrar</button>
+      <button type="submit" (click)="Registrar()">Registrar</button>
     </form>
   </div>
