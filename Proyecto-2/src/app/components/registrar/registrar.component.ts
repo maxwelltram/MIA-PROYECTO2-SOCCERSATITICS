@@ -13,7 +13,13 @@ export class RegistrarComponent {
     nombre:'',
     apellido:'',
     email:'',
-    password:''
+    password:'',
+    telefono:'',
+    genero:'',
+    fechaN:'',
+    fechaR:'',
+    dir:'',
+    pais:''
   }
 
   Registrar(){

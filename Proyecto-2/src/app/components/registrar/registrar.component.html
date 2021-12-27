@@ -41,6 +41,64 @@
 
     />
 
+    <input
+    type="telefono"
+    
+    name="telefono"
+    placeholder="Telefono"
+    required="required"
+    [(ngModel)]="NuevoUsuario.telefono"
+
+  />
+
+  <input
+  type="genero"
+  
+  name="genero"
+  placeholder="Genero"
+  required="required"
+  [(ngModel)]="NuevoUsuario.genero"
+
+/>
+<input
+type="fechaNac"
+
+name="fechaNac"
+placeholder="Fecha Nacimiento"
+required="required"
+[(ngModel)]="NuevoUsuario.fechaN"
+
+/>
+<input
+type="fechaReg"
+
+name="fechReg"
+placeholder="Fecha Registro"
+required="required"
+[(ngModel)]="NuevoUsuario.fechaR"
+
+/>
+
+<input
+type="direccion"
+
+name="direccion"
+placeholder="Direccion"
+required="required"
+[(ngModel)]="NuevoUsuario.dir"
+
+/>
+
+<input
+type="pais"
+
+name="pais"
+placeholder="Pais"
+required="required"
+[(ngModel)]="NuevoUsuario.pais"
+
+/>
+
       <button type="submit" (click)="Registrar()">Registrar</button>
     </form>
   </div>
