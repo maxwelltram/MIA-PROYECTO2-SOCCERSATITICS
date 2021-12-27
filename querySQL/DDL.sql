@@ -146,10 +146,22 @@ create table competencia(
     id number not null primary key,
     nombre varchar(20) not null,
     anio number not null, 
-    tipo varchar(20) not null,
-    campeon number not null,
+    tipocompetencia number not null,
+    campeon number  null,
     pais number not null
 );
+
+create table competidor(
+    id number not null primary key,
+    equipo number not null,
+    competencia number not null, 
+);
+
+create table tipocompetencia(
+    id number not null primary key,
+    nombre varchar(10) not null
+);
+
 
 create table tarjeta(
     id number not null primary key,
@@ -161,13 +173,23 @@ ALTER TABLE autogol
     ADD CONSTRAINT autogol_incidencia_fk FOREIGN KEY (incidencia)
         REFERENCES incidencia (id);
 
-ALTER TABLE competencia
-    ADD CONSTRAINT competencia_equipo_fk FOREIGN KEY (campeon)
-        REFERENCES equipo (id);
 
 ALTER TABLE competencia
     ADD CONSTRAINT competencia_pais_fk FOREIGN KEY (pais)
         REFERENCES pais (id);
+
+ALTER TABLE competencia
+    ADD CONSTRAINT competencia_tipocompetencia_fk FOREIGN KEY (tipocompetencia)
+        REFERENCES tipocompetencia ( id );
+
+ALTER TABLE competidor
+    ADD CONSTRAINT competidor_competencia_fk FOREIGN KEY (competencia)
+        REFERENCES competencia ( id );
+
+ALTER TABLE competidor
+    ADD CONSTRAINT competidor_equipo_fk FOREIGN KEY (equipo)
+        REFERENCES equipo ( id );
+
 
 ALTER TABLE directort
     ADD CONSTRAINT directort_pais_fk FOREIGN KEY (pais)
