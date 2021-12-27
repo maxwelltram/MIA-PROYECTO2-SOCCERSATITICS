@@ -110,8 +110,10 @@ create table direccion(
 create table incidencia(
     id number not null primary key,
     jugador number not null,
-    minuto number not null,
-    partido number not null
+    minuto number not null,    
+    partido number not null,
+    equipo number not null,
+    detalle varchar(250) not null
 );
 
 create table autogol(
@@ -218,6 +220,10 @@ ALTER TABLE gol
 ALTER TABLE incidencia
     ADD CONSTRAINT incidencia_jugador_fk FOREIGN KEY (jugador)
         REFERENCES jugador (id);
+
+ALTER TABLE incidencia
+    ADD CONSTRAINT incidencia_equipo_fk FOREIGN KEY (equipo)
+        REFERENCES equipo (id);
 
 ALTER TABLE incidencia
     ADD CONSTRAINT incidencia_partido_fk FOREIGN KEY (partido)

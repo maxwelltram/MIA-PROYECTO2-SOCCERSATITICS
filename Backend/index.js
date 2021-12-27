@@ -175,8 +175,31 @@ app.post("/cargarCompeticiones", (req,  res) =>{
     console.log(fecha);})
 
 app.post("/cargarPartidoIncidencia", (req,  res) =>{ 
-    res.send("Cargar Partidos e Incidencias")
-})
+  var body='';
+  var ruta;
+  var cadenaJson;
+  res.send("Cargar Partidos e Incidencias");
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+      console.log(body);
+      res.statusCode=200;
+      //res.setHeader('Content-Type', 'application/json');
+      cadenaJson= JSON.parse(body);
+      console.log(cadenaJson);
+      ruta = cadenaJson['ruta'];
+      console.log(ruta);
+      insertarPartidos(cargarArchivo(ruta));
+      res.end();
+  })
+
+  var fecha = numeroAFecha(4606, true);
+  console.log(fecha);})
+
+
 
 app.listen(3000, ()=>(
     console.log("servidor corriendo en el puerto",3000),
@@ -1019,6 +1042,103 @@ async  function insertarCompetencias(datos){
 
 
 }
+
+async  function insertarPartidos(datos){
+  for(const itemFile of datos){
+      let conn
+      var pais=0;
+      var partido=0;
+      var existe = false;
+      var existePart = false;
+      
+
+      try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute(
+          "SELECT id FROM partido where fecha=TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
+        )
+        console.log("aqui")
+        console.log(result.rows[0])
+        if(result.rows[0]!=undefined){
+          existePart = true;  
+        }
+      } catch (err) {
+        console.log('Ouch! select partido1', err)
+        console.log(pais)
+  
+        existePart = true;
+      } finally {
+        if (conn) {
+          await conn.close()
+        }
+      }
+
+    if (!existePart){
+      try {
+        conn = await oracledb.getConnection(connection)
+        const result = await conn.execute(
+          "insert into partido values( TEST_ID_SEQ.nextval,"+
+            "TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY'),"+
+           " (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais),"+
+            
+           " "+itemFile["Asistencia"]+", "+
+            "(select equipo.id from equipo inner join pais on equipo.nombres= '"+itemFile["Equipo_Visita"]+"' and pais.nombre = '"+itemFile["Pais_Visita"]+"' and pais.id=equipo.pais) ,"+
+            "(select equipo.id from equipo inner join pais on equipo.nombres= '"+itemFile["Equipo_Local"]+"' and pais.nombre = '"+itemFile["Pais_Local"]+"' and pais.id=equipo.pais), "+
+            "'"+itemFile["Resultado"]+"',"+
+            "'"+itemFile["Estado"]+"' )",{},{autoCommit:true})
+  
+        console.log("aqui")
+  
+      } catch (err) {
+        console.log('Ouch! consulta partido', err)
+      } finally {
+        if (conn) {
+          await conn.close()
+        }
+      }
+    }
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute(
+        "SELECT id FROM partido where fecha=TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
+      )
+      console.log("aqui")
+      console.log(result.rows[0])
+      partido=result.rows[0];
+    } catch (err) {
+      console.log('Ouch! select partido2', err)
+      console.log(pais)
+
+      existePart = true;
+    } finally {
+      if (conn) {
+        await conn.close()
+      }
+    }
+
+    try {
+      conn = await oracledb.getConnection(connection)
+      const result = await conn.execute("INSERT INTO incidencia VALUES (TEST_ID_SEQ.nextval, (select jugador.id from jugador inner join participante   on jugador.nombres_apellidos = '"+itemFile["Jugador"]+"' and participante.jugador = jugador.id  inner join equipo on equipo.id = participante.equipo and equipo.nombres= '"+itemFile["Equipo_Incidencia"]+"' where ROWNUM <= 1),"+itemFile["Minuto"]+", "+partido+" ,(select equipo.id from equipo inner join pais on equipo.nombres= '"+itemFile["Equipo_Incidencia"]+"' and (pais.nombre = '"+itemFile["Pais_Local"]+"' or pais.nombre = '"+itemFile["Pais_Visita"]+"') and pais.id=equipo.pais where ROWNUM <= 1), '"+itemFile["Incidencia"]+"' )",{},{autoCommit:true})
+      console.log('Wow! Si inserte!')
+    }catch (err) {
+      console.log('Ouch! No inserte! Participante..', err)
+      console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
+   }finally {
+      if (conn) { 
+          await conn.close()
+       }
+    }
+      
+  
+
+
+  }
+  
+
+
+
+}
+
 
 function numeroAFecha(numeroDeDias, esExcel = false) {
     if(numeroDeDias==undefined){
