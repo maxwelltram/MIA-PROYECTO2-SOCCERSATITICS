@@ -19,7 +19,7 @@ let transporter = nodemailer.createTransport({
   });
 
   transporter.verify().then(()=>{
-      console.log("Listos para enviar");
+      console.log("Listos para envar");
   });
 
 let connection = {
@@ -150,8 +150,29 @@ app.post("/cargarJugadores", (req,  res) =>{
     console.log(fecha);})
 
 app.post("/cargarCompeticiones", (req,  res) =>{ 
-    res.send("Cargar Competiciones")
-})
+  var body='';
+    var ruta;
+    var cadenaJson;
+    res.send("Cargar Competiciones");
+    req.on('data', data =>{
+        body+=data;
+
+    });
+
+    req.on('end', ()=>{
+        console.log(body);
+        res.statusCode=200;
+        //res.setHeader('Content-Type', 'application/json');
+        cadenaJson= JSON.parse(body);
+        console.log(cadenaJson);
+        ruta = cadenaJson['ruta'];
+        console.log(ruta);
+        insertarCompetencias(cargarArchivo(ruta));
+        res.end();
+    })
+
+    var fecha = numeroAFecha(4606, true);
+    console.log(fecha);})
 
 app.post("/cargarPartidoIncidencia", (req,  res) =>{ 
     res.send("Cargar Partidos e Incidencias")
@@ -755,10 +776,12 @@ async  function insertarCompetencias(datos){
       var pais=0;
       var paisEquipo=0;
       var existe = false;
-      var existeJug = false;
-      var jugador = 0;
+      var existeComp = false;
+      var competencia = 0;
       var equipo = 0;
-      var tipo
+      var tipo = 0;
+      var Campeon = 0;
+
 
     try {
       conn = await oracledb.getConnection(connection)
@@ -906,7 +929,8 @@ async  function insertarCompetencias(datos){
       console.log(result.rows[0])
       if(result.rows[0]!=undefined){
         existe = true;  
-        equipo = result.rows[0];
+        Campeon = result.rows[0];
+
       }
     } catch (err) {
       console.log('Ouch! consulta equipo', err)
@@ -923,18 +947,18 @@ async  function insertarCompetencias(datos){
     try {
       conn = await oracledb.getConnection(connection)
       const result = await conn.execute(
-        "SELECT id FROM competencia where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and anio="+numeroAFecha(itemFile["Año"])
+        "SELECT id FROM competencia where nombre='"+itemFile["Nombre"]+"' and pais="+pais+" and anio="+itemFile["Año"]
       )
       console.log("aqui")
       console.log(result.rows[0])
       if(result.rows[0]!=undefined){
-        existeJug = true;  
+        existeComp = true;  
       }
     } catch (err) {
-      console.log('Ouch! select jugador1', err)
+      console.log('Ouch! select comp', err)
       console.log(pais)
 
-      existeJug = true;
+      existeComp = true;
     } finally {
       if (conn) {
         await conn.close()
@@ -942,10 +966,10 @@ async  function insertarCompetencias(datos){
     }
   //insertar director 
 
-  if(!existeJug){
+  if(!existeComp){
     try {
         conn = await oracledb.getConnection(connection)
-        const result = await conn.execute("INSERT INTO jugador VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY') ,"+pais+","+posicion+", null )",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO competencia VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"',"+itemFile["Año"]+" ,"+tipo+","+Campeon+", "+pais+" )",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
     }catch (err) {
         console.log('Ouch! No inserte! Jugador', err)
@@ -959,12 +983,13 @@ async  function insertarCompetencias(datos){
   // id del director
   try {
     conn = await oracledb.getConnection(connection)
+    console.log("Anio "+numeroAFecha(itemFile["Año"]))
     const result = await conn.execute(
-      "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
-    )
+      "SELECT id FROM competencia where nombre='"+itemFile["Nombre"]+"' and pais="+pais+" and anio="+itemFile["Año"]
+      )
     console.log("aqui")
     console.log(result.rows[0])
-    jugador = result.rows[0]
+    competencia = result.rows[0]
   } catch (err) {
     console.log('Ouch! select jugador', err)
   } finally {
@@ -976,11 +1001,10 @@ async  function insertarCompetencias(datos){
   if(existe){
     try {
         conn = await oracledb.getConnection(connection)
-        const result = await conn.execute("INSERT INTO participante VALUES (TEST_ID_SEQ.nextval, "+jugador+","+equipo+", TO_DATE('"+numeroAFecha(itemFile["Fecha_Ini"], true)+"','DD/MM/YYYY') ,TO_DATE('"+numeroAFecha(itemFile["Fecha_Fin"], true)+"','DD/MM/YYYY') )",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO competidor VALUES (TEST_ID_SEQ.nextval, "+equipo+","+competencia+" )",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
     }catch (err) {
         console.log('Ouch! No inserte! Participante', err)
-        console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
     }finally {
         if (conn) { 
             await conn.close()

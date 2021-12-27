@@ -175,6 +175,10 @@ ALTER TABLE autogol
 
 
 ALTER TABLE competencia
+    ADD CONSTRAINT competencia_campeon_fk FOREIGN KEY (campeon)
+        REFERENCES equipo (id);
+
+ALTER TABLE competencia
     ADD CONSTRAINT competencia_pais_fk FOREIGN KEY (pais)
         REFERENCES pais (id);
 
