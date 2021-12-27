@@ -7,7 +7,7 @@
         name="email"
         placeholder="Email"
         required="required"
-        [(ngModel)]="usuario.email"
+        [(ngModel)]="usuario"
       />
       <input
         type="password"
@@ -15,11 +15,12 @@
         name="password"
         placeholder="Password"
         required="required"
-        [(ngModel)]="usuario.password"
+        [(ngModel)]="password"
       />
       <button type="submit" (click)="Ingresar()">Log in</button>
       <br>
-      <label>¿Aún no tienes cuenta? <a  [routerLink]="['registrar']"> Registrarse</a></label>
+      <label>¿Aún no tienes cuenta?</label>
+      <button type="submit" (click)="Registrar()">Registrar</button>
 
     </form>
   </div>

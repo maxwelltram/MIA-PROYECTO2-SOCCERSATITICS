@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import { APP_ROUTING } from './app.routes';
 
 //Servicios
-
+import { HttpClientModule, HttpClient}  from '@angular/common/http';
 
 //Componentes 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,6 +18,7 @@ import { RegistrarComponent } from './components/registrar/registrar.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,13 +26,15 @@ import { RegistrarComponent } from './components/registrar/registrar.component';
     NavbarComponent,
     AboutComponent,
     LoginComponent,
-    RegistrarComponent
+    RegistrarComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     APP_ROUTING,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

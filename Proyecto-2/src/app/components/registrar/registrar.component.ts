@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-registrar',
@@ -7,23 +9,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistrarComponent {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    public registrarService: UserService
+  ) { }
 
-  NuevoUsuario ={
-    nombre:'',
-    apellido:'',
-    email:'',
-    password:'',
-    telefono:'',
-    genero:'',
-    fechaN:'',
-    fechaR:'',
-    dir:'',
-    pais:''
+  ngOnInit(): void {
+    this.registrarService.GetUsers().subscribe((res)=>{
+      console.log(res);
+    })
   }
+
+
+  nombre: string="";
+  apellido: string="";
+  email: string="";
+  password: string="";
+  telefono: string="";
+  genero: string="";
+  fechaN: string="";
+  fechaR: string="";
+  dir: string="";
+  pais: string="";
+
 
   Registrar(){
-    console.log(this.NuevoUsuario);
+    console.log(this.nombre);
+    this.registrarService.InsertUser(this.nombre,this.apellido,this.email,this.password,this.telefono,this.genero,this.fechaN,this.fechaR,
+      this.dir,this.pais);
   }
+  
 
 }
