@@ -4,11 +4,18 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
   constructor() { }
 
-  ngOnInit(): void {
+  contacto={
+    email:'',
+    comentario:''
   }
+
+  Contactar(){
+    console.log(this.contacto);
+  }
+
 
 }

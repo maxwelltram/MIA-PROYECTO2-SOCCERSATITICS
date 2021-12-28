@@ -1,6 +1,56 @@
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-      <h1 class="display-4">Soccer Statistics</h1>
-      <p class="lead">La pagina de streaming No.1 en el mundo.</p>
+  <div class="page-header">
+    <h1>Soccer Statistics</h1>
+    <hr class="my-4">
+  </div>
+
+<div class="card-group">
+  <div class="card text-white bg-primary  mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Mision</h5>
+      <p class="card-text">Llegar a cada uno de los hogares
+        de los amantes del futbol, creando en ellos la satisfacción
+        de disfrutar un partido.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
     </div>
   </div>
+
+  <div class="card text-white bg-success mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Vision</h5>
+      <p class="card-text">Ser una comunidad grande de aficionados y amantes
+        del futbol, logrando ser cada día muchos más.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+
+  <div class="card text-white bg-primary mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Nosotros</h5>
+      <p class="card-text">Una pareja de amigos, apasionados por crear una
+        plataforma la cual informe sobre el futbol y las personas amen.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="page-contact">
+  <h1>Contactanos</h1>
+  <hr class="my-4">
+</div>
+
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="contacto.email" name="emailContac">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Escribe tu comentario:</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="contacto.comentario" name="comentContac"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary" (click)="Contactar()">Enviar</button>
+</form>
+
+

@@ -8,6 +8,12 @@ const cors = require('cors');
 const nodemailer = require("nodemailer");//instalar paquete npm install nodemailer
 const app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -42,13 +48,40 @@ async function enviar (){
       });
 }
 
+
+app.post("/AddUser", (req,  res) =>{ 
+  console.log("body");
+
+  var body='';
+  var ruta;
+  var cadenaJson;
+  res.send("ADD User");
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+    console.log(body);
+    res.statusCode=200;
+    //res.setHeader('Content-Type', 'application/json');
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    res.end();
+})
+
+  
+})
+
+
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
     enviar();
 })
 
 app.post("/cargarEstadios", (req,  res) =>{ 
-    var body='';
+    
+  var body='';
     var ruta;
     var cadenaJson;
     res.send("Cargar Estadios");
@@ -201,7 +234,7 @@ app.post("/cargarPartidoIncidencia", (req,  res) =>{
 
 
 
-app.listen(3000, ()=>(
+app.listen(3000, (Request)=>(
     console.log("servidor corriendo en el puerto",3000),
     cargarArchivo("archivoEstadios.xlsx")
 ));
