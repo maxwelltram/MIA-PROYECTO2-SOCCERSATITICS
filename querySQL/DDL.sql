@@ -41,6 +41,27 @@ create table posicion(
     nombre varchar(20)
 );
 
+create table suscripcion(
+    id number Not null primary key,
+    detalle varchar(75) not null,   
+    costo number not null,
+    equipo number not null,
+    usuario number not null
+);
+
+
+create table publicacion(
+    id number Not null primary key,
+    usuario number not null,
+    noticia number not null
+);
+
+create table publicacion(
+    id number Not null primary key,
+    titulo varchar(30) not null,
+    detalle varchar(300) not null
+);
+
 
 create table directort(
     id number Not null primary key,
@@ -116,33 +137,8 @@ create table incidencia(
     detalle varchar(250) not null
 );
 
-create table autogol(
-    id number not null primary key,
-    incidencia number not null
-);
 
-create table gol(
-    id number not null primary key,
-    incidencia number not null,
-    jugador number not null
-);
 
-create table tirolibre(
-    id number not null primary key,
-    distancia number not null,
-    gol number not null
-);
-
-create table penal(
-    id number not null primary key,
-    gol number not null,
-    jugador number not null
-);
-
-create table jugada(
-    id number not null primary key,
-    gol number not null
-);
 
 create table competencia(
     id number not null primary key,
@@ -165,15 +161,8 @@ create table tipocompetencia(
 );
 
 
-create table tarjeta(
-    id number not null primary key,
-    color varchar(10) not null,
-    incidencia number not null
-);
 
-ALTER TABLE autogol
-    ADD CONSTRAINT autogol_incidencia_fk FOREIGN KEY (incidencia)
-        REFERENCES incidencia (id);
+
 
 
 ALTER TABLE competencia
@@ -209,13 +198,7 @@ ALTER TABLE estadio
     ADD CONSTRAINT estadio_pais_fk FOREIGN KEY (pais)
         REFERENCES pais (id);
 
-ALTER TABLE gol
-    ADD CONSTRAINT gol_incidencia_fk FOREIGN KEY (incidencia)
-        REFERENCES incidencia (id);
 
-ALTER TABLE gol
-    ADD CONSTRAINT gol_jugador_fk FOREIGN KEY (jugador)
-        REFERENCES jugador (id);
 
 ALTER TABLE incidencia
     ADD CONSTRAINT incidencia_jugador_fk FOREIGN KEY (jugador)
@@ -229,9 +212,6 @@ ALTER TABLE incidencia
     ADD CONSTRAINT incidencia_partido_fk FOREIGN KEY (partido)
         REFERENCES partido (id);
 
-ALTER TABLE jugada
-    ADD CONSTRAINT jugada_gol_fk FOREIGN KEY (gol)
-        REFERENCES gol (id);
 
 ALTER TABLE jugador
     ADD CONSTRAINT jugador_pais_fk FOREIGN KEY (pais)
@@ -261,17 +241,6 @@ ALTER TABLE partido
     ADD CONSTRAINT partido_estadio_fk FOREIGN KEY (estadio)
         REFERENCES estadio (id);
 
-ALTER TABLE penal
-    ADD CONSTRAINT penal_gol_fk FOREIGN KEY (gol)
-        REFERENCES gol (id);
-
-ALTER TABLE penal
-    ADD CONSTRAINT penal_jugador_fk FOREIGN KEY (jugador)
-        REFERENCES jugador (id);
-
-ALTER TABLE tarjeta
-    ADD CONSTRAINT tarjeta_incidencia_fk FOREIGN KEY (incidencia)
-        REFERENCES incidencia (id);
 
 ALTER TABLE tirolibre
     ADD CONSTRAINT tirolibre_gol_fk FOREIGN KEY (gol)
@@ -296,3 +265,20 @@ ALTER TABLE direccion
 ALTER TABLE direccion
     ADD CONSTRAINT direccion_equipo_fk FOREIGN KEY (equipo)
         REFERENCES equipo ( id );
+
+
+ALTER TABLE publicacion
+    ADD CONSTRAINT publicacion_noticia_fk FOREIGN KEY ( noticia )
+        REFERENCES noticia ( id );
+
+ALTER TABLE publicacion
+    ADD CONSTRAINT publicacion_usuario_fk FOREIGN KEY ( usuario )
+        REFERENCES usuarios ( id );
+
+ALTER TABLE suscripcion
+    ADD CONSTRAINT suscripcion_equipo_fk FOREIGN KEY ( equipo )
+        REFERENCES equipo ( id );
+
+ALTER TABLE suscripcion
+    ADD CONSTRAINT suscripcion_usuario_fk FOREIGN KEY ( usuario )
+        REFERENCES usuarios ( id );

@@ -74,6 +74,202 @@ app.post("/AddUser", (req,  res) =>{
 })
 
 
+app.get("/jugador", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM jugador ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
+app.get("/director", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM directort ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
+
+app.get("/equipo", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM equipo ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
+
+app.get("/estadios", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM estadio ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
+
+app.get("/partidos", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM partido ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
+
+app.get("/competiciones", (req,  res) =>{ 
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM competencia ", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+        }
+        
+    });
+});
+})
+
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
     enviar();
@@ -1022,7 +1218,7 @@ async  function insertarCompetencias(datos){
     }
   //insertar director 
 
-  if(!existeComp){
+  if(existeComp){
     try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute("INSERT INTO competencia VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"',"+itemFile["Año"]+" ,"+tipo+","+Campeon+", "+pais+" )",{},{autoCommit:true})
