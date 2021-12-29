@@ -8,6 +8,12 @@ const cors = require('cors');
 const nodemailer = require("nodemailer");//instalar paquete npm install nodemailer
 const app = express();
 
+
+
+
+
+
+
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -41,6 +47,29 @@ async function enviar (){
         html: "<b>Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt</b>", // html body
       });
 }
+
+
+app.post("/AddUser",(req,res)=>{
+  console.log("HOLA");
+  req.on('data', data =>{
+    body+=data;
+    console.log(body);
+  });
+  /*try {
+    conn = await oracledb.getConnection(connection)
+
+    const result = await conn.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Pais"]+"')",{},{autoCommit:true})
+    console.log('Wow! Si inserte!')
+
+  } catch (err) {
+    console.log('Ouch! No inserte!')
+  } finally {
+    if (conn) { 
+      await conn.close()
+    }
+  }*/
+})
+
 
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
