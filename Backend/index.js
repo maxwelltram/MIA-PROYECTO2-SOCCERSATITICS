@@ -58,6 +58,358 @@ app.post("/AddUser",(req,res)=>{
   req.on('data', data =>{
     body+=data;
     console.log(body);
+<<<<<<< Updated upstream
+=======
+    res.statusCode=200;
+    //res.setHeader('Content-Type', 'application/json');
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    res.end();
+    for(const itemFile of  cadenaJson){
+      let conn
+      var user=0;
+      var existe = false;
+      console.log(itemFile);
+    }
+  
+  
+})
+
+  
+})
+
+app.get("/", (req,  res) =>{ 
+  res.send("hola mundo!");
+  enviar();
+})
+
+
+app.post("/jugadorXedad", (req,  res) =>{ 
+  var hoy = new Date();
+  var antes = new Date();
+  var antesPrim = new Date('1/1/1900');
+  var body='';
+  var edad;
+  var cadenaJson;
+  var cadena1;
+  var cadena2;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      edad = cadenaJson['edad']
+      console.log(hoy.toLocaleDateString());
+      antes.setFullYear(hoy.getFullYear() - edad);
+      console.log(antes.toLocaleDateString());
+      console.log(antesPrim.toLocaleDateString());
+      cadena1= antesPrim.toLocaleDateString();
+      cadena2 = antes.toLocaleDateString();
+    });
+
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM jugador where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+      outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+app.post("/directorXedad", (req,  res) =>{ 
+  var hoy = new Date();
+  var antes = new Date();
+  var antesPrim = new Date('1/1/1900');
+  var body='';
+  var edad;
+  var cadenaJson;
+  var cadena1;
+  var cadena2;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      edad = cadenaJson['edad']
+      console.log(hoy.toLocaleDateString());
+      antes.setFullYear(hoy.getFullYear() - edad);
+      console.log(antes.toLocaleDateString());
+      console.log(antesPrim.toLocaleDateString());
+      cadena1= antesPrim.toLocaleDateString();
+      cadena2 = antes.toLocaleDateString();
+    });
+
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM directort where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+      outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+
+
+
+
+
+
+app.post("/jugadorXedadMen", (req,  res) =>{ 
+  var hoy = new Date();
+  var antes = new Date();
+  var antesPrim = new Date();
+  var body='';
+  var edad;
+  var cadenaJson;
+  var cadena1;
+  var cadena2;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      edad = cadenaJson['edad']
+      console.log(hoy.toLocaleDateString());
+      antesPrim.setFullYear(hoy.getFullYear() - edad);
+      console.log(antes.toLocaleDateString());
+      console.log(antesPrim.toLocaleDateString());
+      cadena1= antesPrim.toLocaleDateString();
+      cadena2 = antes.toLocaleDateString();
+    });
+
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM jugador where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+      outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+app.post("/directorXedadMen", (req,  res) =>{ 
+  var hoy = new Date();
+  var antes = new Date();
+  var antesPrim = new Date();
+  var body='';
+  var edad;
+  var cadenaJson;
+  var cadena1;
+  var cadena2;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      edad = cadenaJson['edad']
+      console.log(hoy.toLocaleDateString());
+      antesPrim.setFullYear(hoy.getFullYear() - edad);
+      console.log(antes.toLocaleDateString());
+      console.log(antesPrim.toLocaleDateString());
+      cadena1= antesPrim.toLocaleDateString();
+      cadena2 = antes.toLocaleDateString();
+    });
+
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM directort where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+      outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+
+
+
+app.post("/equipoXcompeticion", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM equipo inner join competencia on nombre= '"+nombre+"' inner join competidor on equipo.id=competidor.equipo and competencia.id=competidor.competencia" , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+
+
+
+
+app.post("/jugadorXequipo", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM jugador inner join equipo on nombres= '"+nombre+"' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo" , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+app.post("/directorXequipo", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+>>>>>>> Stashed changes
   });
   /*try {
     conn = await oracledb.getConnection(connection)
