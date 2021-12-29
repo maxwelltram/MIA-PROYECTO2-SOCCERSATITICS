@@ -68,7 +68,6 @@ this.router.navigate(['/about']);
 
     })
     
-    
    
   }
 
