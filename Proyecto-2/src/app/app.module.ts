@@ -15,6 +15,7 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrarComponent } from './components/registrar/registrar.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 
 
@@ -27,6 +28,7 @@ import { RegistrarComponent } from './components/registrar/registrar.component';
     AboutComponent,
     LoginComponent,
     RegistrarComponent,
+    ReportesComponent,
 
   ],
   imports: [
