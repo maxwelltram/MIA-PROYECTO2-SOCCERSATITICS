@@ -15,9 +15,7 @@ export class RegistrarComponent {
   ) { }
 
   ngOnInit(): void {
-    this.registrarService.GetUsers().subscribe((res)=>{
-      console.log(res);
-    })
+    
   }
 
 
