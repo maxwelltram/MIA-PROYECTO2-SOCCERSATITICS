@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from  '@angular/router';
+import { LoginService} from "../../services/login.service";
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,8 @@ import { Router} from  '@angular/router';
 export class LoginComponent  {
 
   constructor(
-    private router: Router
+    private router: Router,
+    public loginService: LoginService
   ) { }
 
 usuario: string="";
@@ -17,6 +19,10 @@ password: string="";
 
   Ingresar(){
 console.log(this.usuario);
+var user={usuario:this.usuario,password:this.password};
+this.loginService.GetLogin(user).subscribe(Response => {null});;
+
+
 this.router.navigate(['/about']);
 
   }

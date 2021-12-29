@@ -49,6 +49,8 @@ async function enviar (){
 }
 
 
+
+
 app.post("/AddUser", (req,  res) =>{ 
   console.log("body");
 
@@ -67,19 +69,54 @@ app.post("/AddUser", (req,  res) =>{
     //res.setHeader('Content-Type', 'application/json');
     cadenaJson= JSON.parse(body);
     console.log(cadenaJson);
+
+    insertarUsuario(cadenaJson);
+    
+
     res.end();
-    for(const itemFile of  cadenaJson){
-      let conn
-      var user=0;
-      var existe = false;
-      console.log(itemFile);
-    }
-  
-  
 })
 
   
 })
+
+
+app.get("/getUsers",(req, res)=>{
+  var x=2;
+  oracledb.getConnection(connection, function (err, connection){
+    if (err){
+      // Error connecting to DB
+      res.set('Content-Type', 'application/json');
+      res.status(500).send(JSON.stringify({
+          status: 500,
+          message: "Error connecting to DB",
+          detailed_message: err.message
+      }));
+      return;
+    }
+    connection.execute("SELECT correo,password FROM usuario ",{},{
+      outFormat: oracledb.OBJECT // Return the result as Object
+    },function(err,result){
+      if (err){
+        es.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+        }));
+      }else{
+        res.set('Content-Type', 'application/json');
+        res.status(200).send(JSON.stringify(result.rows));
+      }
+
+  });
+});
+})
+
+app.get("/AccesoLogin", (req,  res) =>{ 
+  res.send("hola mundo!");
+  enviar();
+})
+
 
 app.get("/", (req,  res) =>{ 
   res.send("hola mundo!");
@@ -1002,6 +1039,25 @@ async  function insertarDirectores(datos){
 }
 
 
+async function insertarUsuario(datos){
+    let conn
+  try {
+    conn = await oracledb.getConnection(connection)
+    
+    const result = await conn.execute("INSERT INTO usuarios VALUES (TEST_ID_SEQ.nextval, '"+datos["nombre"]+"','"+datos["apellido"]+"','"+datos["email"]+"','"+datos["pass"]+"',"+datos["telefono"]+","+
+    "(Select id from genero where"+ datos["genero"]+"),TO_DATE('"+datos["fechan"]+"','DD/MM/YYYY'),TO_DATE('"+datos["fechar"]+"','DD/MM/YYYY'),'"+datos["dir"]+"',(Select id from pais where"+ datos["pais"]+"))",{},{autoCommit:true})
+    
+    console.log("aqui")
+    console.log('USUARIO REGISTRADO CORRECTAMENTE');  
+  } catch (err) {
+    console.log(datos["nombre"]+"\tPrueba")
+    console.log('Ouch!', err)
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+
 async  function insertarEquipos(datos){
     for(const itemFile of datos){
         let conn
@@ -1766,5 +1822,5 @@ function consultaSelectGenero(){
             
         });
     });
-
+  }
 }
