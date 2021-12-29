@@ -112,9 +112,37 @@ app.get("/getUsers",(req, res)=>{
 });
 })
 
-app.get("/AccesoLogin", (req,  res) =>{ 
-  res.send("hola mundos!");
-  enviar();
+
+app.post("/AccesoLogin", (req,  res) =>{ 
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM usuarios", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+            console.log(result.rows);
+        }
+        
+    });
+});
 })
 
 
@@ -1757,36 +1785,7 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
   }
 
 function consultaSelectUser(){
-    oracledb.getConnection(connection, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute("SELECT * FROM usuarios", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
-            } else {
-                if(result.rows=[]){
-                    console.log("nulo")
-                }
-                console.log(result.rows);
-            }
-            
-        });
-    });
+    
 
 }
 
