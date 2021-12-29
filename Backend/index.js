@@ -113,7 +113,7 @@ app.get("/getUsers",(req, res)=>{
 })
 
 app.get("/AccesoLogin", (req,  res) =>{ 
-  res.send("hola mundo!");
+  res.send("hola mundos!");
   enviar();
 })
 
@@ -1044,8 +1044,8 @@ async function insertarUsuario(datos){
   try {
     conn = await oracledb.getConnection(connection)
     
-    const result = await conn.execute("INSERT INTO usuarios VALUES (TEST_ID_SEQ.nextval, '"+datos["nombre"]+"','"+datos["apellido"]+"','"+datos["email"]+"','"+datos["pass"]+"',"+datos["telefono"]+","+
-    "(Select id from genero where"+ datos["genero"]+"),TO_DATE('"+datos["fechan"]+"','DD/MM/YYYY'),TO_DATE('"+datos["fechar"]+"','DD/MM/YYYY'),'"+datos["dir"]+"',(Select id from pais where"+ datos["pais"]+"))",{},{autoCommit:true})
+    const result = await conn.execute("INSERT INTO usuarios VALUES (TEST_ID_SEQ.nextval, '"+datos["nombre"]+"','"+datos["apellido"]+"','"+datos["pass"]+"','"+datos["email"]+"',"+datos["telefono"]+",null,"+
+    "(Select id from genero where nombre='"+ datos["genero"]+"'),TO_DATE('"+datos["fechan"]+"','DD/MM/YYYY'),TO_DATE('"+datos["fechar"]+"','DD/MM/YYYY'),'"+datos["dir"]+"',(Select id from pais where nombre='"+ datos["pais"]+"'),3)",{},{autoCommit:true})
     
     console.log("aqui")
     console.log('USUARIO REGISTRADO CORRECTAMENTE');  
