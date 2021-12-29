@@ -14,7 +14,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -300,6 +299,64 @@ app.post("/directorXedadMen", (req,  res) =>{
 
 
 
+app.post("/equipoXcompeticion", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM equipo inner join competencia on nombre= '"+nombre+"' inner join competidor on equipo.id=competidor.equipo and competencia.id=competidor.competencia" , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result));
+        }
+        
+    });
+});
+
+  
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -523,29 +580,6 @@ app.get("/competiciones", (req,  res) =>{
     });
 });
 })
-
-=======
-app.post("/AddUser",(req,res)=>{
-  console.log("HOLA");
-  req.on('data', data =>{
-    body+=data;
-    console.log(body);
-  });
-  /*try {
-    conn = await oracledb.getConnection(connection)
-
-    const result = await conn.execute("INSERT INTO pais VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Pais"]+"')",{},{autoCommit:true})
-    console.log('Wow! Si inserte!')
-
-  } catch (err) {
-    console.log('Ouch! No inserte!')
-  } finally {
-    if (conn) { 
-      await conn.close()
-    }
-  }*/
-})
-
 
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
@@ -1495,7 +1529,7 @@ async  function insertarCompetencias(datos){
     }
   //insertar director 
 
-  if(existeComp){
+  if(!existeComp){
     try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute("INSERT INTO competencia VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"',"+itemFile["Año"]+" ,"+tipo+","+Campeon+", "+pais+" )",{},{autoCommit:true})
