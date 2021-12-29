@@ -16,6 +16,9 @@ import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrarComponent } from './components/registrar/registrar.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
+import { UsuarioHomeComponent } from './components/usuario-home/usuario-home.component';
+import { EmpleadoHomeComponent } from './components/empleado-home/empleado-home.component';
+import { ResetContraComponent } from './components/reset-contra/reset-contra.component';
 
 
 
@@ -29,6 +32,9 @@ import { ReportesComponent } from './components/reportes/reportes.component';
     LoginComponent,
     RegistrarComponent,
     ReportesComponent,
+    UsuarioHomeComponent,
+    EmpleadoHomeComponent,
+    ResetContraComponent,
 
   ],
   imports: [

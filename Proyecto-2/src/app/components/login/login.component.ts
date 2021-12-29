@@ -18,13 +18,14 @@ usuario: string="";
 password: string="";
 
   Ingresar(){
-console.log(this.usuario);
-var user={usuario:this.usuario,password:this.password};
-this.loginService.GetLogin(user).subscribe(Response => {null});;
+  console.log(this.usuario);
+  var user={usuario:this.usuario,password:this.password};
+  this.loginService.GetLogin(user).subscribe(Response => {null});;
+  this.router.navigate(['/empleadoHome']);
+  }
 
-
-this.router.navigate(['/about']);
-
+  Recuperar(){
+    this.router.navigate(['resetContrasenia']);
   }
 
   Registrar(){

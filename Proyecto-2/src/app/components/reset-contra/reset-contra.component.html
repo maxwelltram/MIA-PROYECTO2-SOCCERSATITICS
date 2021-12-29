@@ -1,0 +1,16 @@
+<div class="recuperar">
+    <form class="custom-form" method="post">
+      <h1>Recuperar contraseña</h1>
+
+      <input
+      type="Correo"
+      
+      name="Correo"
+      placeholder="Correo electronico"
+      required="required"
+      [(ngModel)]="correo"
+    />
+
+      <button type="submit" (click)="EnviarCorreo()">Enviar correo</button>
+    </form>
+  </div>
