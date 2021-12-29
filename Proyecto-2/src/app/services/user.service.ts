@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs'; 
-
+import { map } from 'rxjs'; 
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +20,27 @@ export class UserService {
     return this.http.get(url);
   }
   //TODO : INSERT USERS
-  InsertUser( usuario : any) :Observable<any> 
-    {      
-      var headers = new HttpHeaders().set("Content-Type", "application/json");
-      console.log(usuario);
-      console.log("holamundo");
+  InsertUser( firstName:string,lastName:string,
+    email:string,password:string,telefono:string,genero:string,
+    fechaNacimiento:string,fechaRegistro:string,direcc:string,
+    pais:string){
+
+      console.log(firstName, lastName);
+
       
     const url = "http://localhost:3000/AddUser";
-    return this.http.post(url, usuario, {headers});
+    return this.http.post(url,{
+      "firstName": firstName,
+      "lastName":  lastName,
+      "email": email,
+      "password": password,
+      "telefono": telefono,
+      "genero": genero,
+      "fechaNacimiento": fechaNacimiento,
+      "fechaRegistro": fechaRegistro,
+      "Direccion": direcc,
+      "Pais": pais
+    },{headers:this.headers}).pipe(map(data =>data));
 
   }
   //TODO : UPDATE USER
