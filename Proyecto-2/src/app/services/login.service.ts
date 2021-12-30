@@ -9,15 +9,17 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-
   headers: HttpHeaders = new HttpHeaders({
     "Content-Type": "aplication/json"
   });
+ 
 
 
-  GetLogin(user : any){
+  GetLogin(user : any):Observable<any>{
     const url = "http://localhost:3000/AccesoLogin";
-    return this.http.get(url);
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,user,{headers});
   }
 
 }

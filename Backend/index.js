@@ -112,9 +112,37 @@ app.get("/getUsers",(req, res)=>{
 });
 })
 
-app.get("/AccesoLogin", (req,  res) =>{ 
-  res.send("hola mundo!");
-  enviar();
+
+app.post("/AccesoLogin", (req,  res) =>{ 
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT * FROM usuarios", {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(result.rows));
+            console.log(result.rows);
+        }
+        
+    });
+});
 })
 
 
@@ -1460,8 +1488,8 @@ async function insertarUsuario(datos){
   try {
     conn = await oracledb.getConnection(connection)
     
-    const result = await conn.execute("INSERT INTO usuarios VALUES (TEST_ID_SEQ.nextval, '"+datos["nombre"]+"','"+datos["apellido"]+"','"+datos["email"]+"','"+datos["pass"]+"',"+datos["telefono"]+","+
-    "(Select id from genero where"+ datos["genero"]+"),TO_DATE('"+datos["fechan"]+"','DD/MM/YYYY'),TO_DATE('"+datos["fechar"]+"','DD/MM/YYYY'),'"+datos["dir"]+"',(Select id from pais where"+ datos["pais"]+"))",{},{autoCommit:true})
+    const result = await conn.execute("INSERT INTO usuarios VALUES (TEST_ID_SEQ.nextval, '"+datos["nombre"]+"','"+datos["apellido"]+"','"+datos["pass"]+"','"+datos["email"]+"',"+datos["telefono"]+",null,"+
+    "(Select id from genero where nombre='"+ datos["genero"]+"'),TO_DATE('"+datos["fechan"]+"','DD/MM/YYYY'),TO_DATE('"+datos["fechar"]+"','DD/MM/YYYY'),'"+datos["dir"]+"',(Select id from pais where nombre='"+ datos["pais"]+"'),3)",{},{autoCommit:true})
     
     console.log("aqui")
     console.log('USUARIO REGISTRADO CORRECTAMENTE');  
@@ -2173,36 +2201,7 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
   }
 
 function consultaSelectUser(){
-    oracledb.getConnection(connection, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute("SELECT * FROM usuarios", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
-            } else {
-                if(result.rows=[]){
-                    console.log("nulo")
-                }
-                console.log(result.rows);
-            }
-            
-        });
-    });
+    
 
 }
 
