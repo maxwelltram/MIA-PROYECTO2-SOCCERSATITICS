@@ -31,13 +31,7 @@ this.router.navigate(['/about']);
 
 
   Ingresar(){
-  console.log(this.usuario);
-  var user={usuario:this.usuario,password:this.password};
-  this.loginService.GetLogin(user).subscribe(Response => {null});;
-  //this.router.navigate(['/empleadoHome']);
-  //this.router.navigate(['./usuarioHome'])
-
-  }
+  
     console.log(this.usuario)
     var user={usuario:this.usuario,password:this.password};
     var busqueda : any
