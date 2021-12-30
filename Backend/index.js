@@ -38,14 +38,14 @@ app.use(bodyparser.urlencoded({
 }));
 
 
-async function enviar (){
+async function enviar (correo){
     let info = await transporter.sendMail({
         from: '"Soccer Statics" <soccerstatsmia2021@gmail.com>', // sender address
-        to: "bryanpaez.125@gmail.com", // list of receivers
-        subject: "Comprobacion de email", // Subject line
-        text: "Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt", // plain text body
-        html: "<b>Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt</b>", // html body
+        to: correo, // list of receivers
+        subject: "Restablecer Password", // Subject line
+        text: "Hola!, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt", // plain text body
       });
+    console.log("Correo Enviado!")
 }
 
 
@@ -144,6 +144,84 @@ app.post("/AccesoLogin", (req,  res) =>{
     });
 });
 })
+
+
+function password(){
+  var abecedario = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"];
+	var numeroAleatorio = 3;
+  var cadena='';
+	// paso 2 - escribir x caracteres
+
+	for(var i = 0; i<8; i++){
+		numeroAleatorio = parseInt(Math.random()*abecedario.length);
+		cadena+=abecedario[numeroAleatorio];
+	}
+  return cadena.toString()
+}
+
+app.post("/Restablecer", (req,  res) =>{ 
+  var body='';
+  var cadenaJson;
+  var correo;
+  var contraProv;
+
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      correo = cadenaJson['correo']
+      console.log(correo);
+      console.log(contraProv);
+      try {
+        remplazarpass(password(), correo, res)
+      //enviar(correo);
+      res.status(200).send();
+      } catch (error) {
+        res.status(500).send();
+      }
+
+  /*oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }    
+    connection.execute("CALL restablecerContra('hola', 'bryanpaez.125@gmail.com')" , function (err) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          res.status(200).send(contraProv);
+        }
+        
+    });
+});*/
+
+});
+setTimeout(function() {
+  console.log("han pasado 2 minutos")
+}, 120000);
+})
+
+
+async function remplazarpass(contra, correo){
+  let conn;
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute("CALL restablecerContra('"+contra+"', '"+correo+"')",{},{autoCommit:true})
+    console.log('Wow! Si pude!')
+
+  
+}
 
 
 app.get("/", (req,  res) =>{ 

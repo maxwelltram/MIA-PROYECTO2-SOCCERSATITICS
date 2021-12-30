@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService} from "../../services/login.service";
 
 @Component({
   selector: 'app-reset-contra',
@@ -7,14 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResetContraComponent implements OnInit {
 
-  constructor() { }
+  constructor(  public loginService: LoginService
+    ) { }
+
+    correo: string="";
 
   ngOnInit(): void {
   }
 
-  correo: string="";
   EnviarCorreo(){
-
+    console.log(this.correo);
+    var correo ={correo:this.correo};
+    this.loginService.Restablecer(correo).subscribe(Response => {null});;
+  
   }
 
 }

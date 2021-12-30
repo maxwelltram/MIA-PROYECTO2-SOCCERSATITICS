@@ -296,3 +296,16 @@ ALTER TABLE direccion
 ALTER TABLE direccion
     ADD CONSTRAINT direccion_equipo_fk FOREIGN KEY (equipo)
         REFERENCES equipo ( id );
+
+ create or replace procedure restablecerContra(contra in varchar2, cor in varchar2)
+    is
+    begin
+        savepoint contraOriginal;
+    update usuarios set clave= contra
+    where correo=cor;
+ end;
+ 
+ 
+ 
+ 
+ call restablecerContra('pruebaa123aa', 'bryanpaez.125@gmail.com')
