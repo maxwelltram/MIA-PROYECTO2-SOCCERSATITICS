@@ -7,6 +7,9 @@ import { ReportesComponent} from "./components/reportes/reportes.component";
 import { UsuarioHomeComponent } from "./components/usuario-home/usuario-home.component";
 import { EmpleadoHomeComponent } from "./components/empleado-home/empleado-home.component";
 import { ResetContraComponent } from "./components/reset-contra/reset-contra.component";
+import { MenuJugadoresComponent } from "./components/menu-jugadores/menu-jugadores.component";
+import { MenuEquiposComponent } from "./components/menu-equipos/menu-equipos.component";
+
 
 const APP_ROUTES: Routes = [
     {path: 'home', component: HomeComponent},
@@ -17,6 +20,8 @@ const APP_ROUTES: Routes = [
     {path: 'usuarioHome', component: UsuarioHomeComponent},
     {path: 'empleadoHome', component:EmpleadoHomeComponent},
     {path: 'resetContrasenia', component:ResetContraComponent},
+    {path: 'jugadoresMenu', component:MenuJugadoresComponent},
+    {path: 'equiposMenu', component:MenuEquiposComponent},
     {path: '**', pathMatch:'full', redirectTo:'home'}
 ];
 
