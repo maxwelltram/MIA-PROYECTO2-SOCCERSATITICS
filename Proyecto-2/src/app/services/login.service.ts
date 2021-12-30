@@ -13,6 +13,13 @@ export class LoginService {
     "Content-Type": "aplication/json"
   });
  
+  Restablecer(correo : any):Observable<any>{
+    const url = "http://localhost:3000/Restablecer";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,correo,{headers});
+  }
+
 
 
   GetLogin(user : any):Observable<any>{

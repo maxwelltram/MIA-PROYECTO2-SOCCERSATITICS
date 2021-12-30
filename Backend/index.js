@@ -38,14 +38,14 @@ app.use(bodyparser.urlencoded({
 }));
 
 
-async function enviar (){
+async function enviar (correo, contra){
     let info = await transporter.sendMail({
         from: '"Soccer Statics" <soccerstatsmia2021@gmail.com>', // sender address
-        to: "bryanpaez.125@gmail.com", // list of receivers
-        subject: "Comprobacion de email", // Subject line
-        text: "Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt", // plain text body
-        html: "<b>Hola mundo, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt</b>", // html body
+        to: correo, // list of receivers
+        subject: "Restablecer Password", // Subject line
+        text: "Hola! \nPara restablecer su contrasenia requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace http://127.0.0.1:4200/login e iniciar sesion con la siguiente contrasenia: "+contra+"\nEl enlace se vence 2 minutos despues de que se haya generado.", // plain text body
       });
+    console.log("Correo Enviado!")
 }
 
 
@@ -146,9 +146,85 @@ app.post("/AccesoLogin", (req,  res) =>{
 })
 
 
+function password(){
+  var abecedario = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"];
+	var numeroAleatorio = 3;
+  var cadena='';
+	// paso 2 - escribir x caracteres
+
+	for(var i = 0; i<8; i++){
+		numeroAleatorio = parseInt(Math.random()*abecedario.length);
+		cadena+=abecedario[numeroAleatorio];
+	}
+  return cadena.toString()
+}
+
+app.post("/Restablecer", (req,  res) =>{ 
+  var body='';
+  var cadenaJson;
+  var correo;
+  var contraProv;
+
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      correo = cadenaJson['correo']
+      console.log(correo);
+      console.log(contraProv);
+      contraProv = password();
+      try {
+        remplazarpass(contraProv, correo, res)
+        enviar(correo, contraProv);
+      res.status(200).send();
+      } catch (error) {
+        res.status(500).send();
+      }
+
+
+
+});
+
+
+
+console.log("a veeer")
+setTimeout(function() {
+  console.log("han pasado 2 minutos")
+
+  try {
+    regresarPass()
+  //enviar(correo);
+  res.status(200).send();
+  } catch (error) {
+    res.status(500).send();
+  }
+}, 5000);
+})
+
+
+async function remplazarpass(contra, correo){
+  let conn;
+    conn = await oracledb.getConnection(connection)
+    await conn.execute("CALL restablecerContra('"+contra+"', '"+correo+"')",{},{autoCommit:true})
+    await conn.rollback()
+    console.log('Wow! Si pude!')
+
+  
+}
+
+async function regresarPass(){
+  let conn;
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(" ROLLBACK",{})
+    console.log('Wow! Si pude!')
+
+  
+}
+
+
 app.get("/", (req,  res) =>{ 
   res.send("hola mundo!");
-  enviar();
+  //enviar();
 })
 
 

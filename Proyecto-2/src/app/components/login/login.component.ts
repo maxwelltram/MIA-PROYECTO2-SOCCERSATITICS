@@ -78,7 +78,9 @@ this.router.navigate(['/about']);
    
   }
 
-
+  Recuperar(){
+    this.router.navigate(['resetContrasenia']);
+  }
 
 
 
