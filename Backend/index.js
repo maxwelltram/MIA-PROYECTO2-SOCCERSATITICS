@@ -38,12 +38,12 @@ app.use(bodyparser.urlencoded({
 }));
 
 
-async function enviar (correo){
+async function enviar (correo, contra){
     let info = await transporter.sendMail({
         from: '"Soccer Statics" <soccerstatsmia2021@gmail.com>', // sender address
         to: correo, // list of receivers
         subject: "Restablecer Password", // Subject line
-        text: "Hola!, requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace https://google.com.gt", // plain text body
+        text: "Hola! \nPara restablecer su contrasenia requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace http://127.0.0.1:4200/login e iniciar sesion con la siguiente contrasenia: "+contra+"\nEl enlace se vence 2 minutos despues de que se haya generado.", // plain text body
       });
     console.log("Correo Enviado!")
 }
@@ -172,52 +172,50 @@ app.post("/Restablecer", (req,  res) =>{
       correo = cadenaJson['correo']
       console.log(correo);
       console.log(contraProv);
+      contraProv = password();
       try {
-        remplazarpass(password(), correo, res)
-      //enviar(correo);
+        remplazarpass(contraProv, correo, res)
+        enviar(correo, contraProv);
       res.status(200).send();
       } catch (error) {
         res.status(500).send();
       }
 
-  /*oracledb.getConnection(connection, function (err, connection) {
-    if (err) {
-        // Error connecting to DB
-        res.set('Content-Type', 'application/json');
-        res.status(500).send(JSON.stringify({
-            status: 500,
-            message: "Error connecting to DB",
-            detailed_message: err.message
-        }));
-        return;
-    }    
-    connection.execute("CALL restablecerContra('hola', 'bryanpaez.125@gmail.com')" , function (err) {
-        if (err) {
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error getting the dba_tablespaces",
-                detailed_message: err.message
-            }));
-        } else {
-          res.set('Content-Type', 'application/json');
-          res.status(200).send(contraProv);
-        }
-        
-    });
-});*/
+
 
 });
+
+
+
+console.log("a veeer")
 setTimeout(function() {
   console.log("han pasado 2 minutos")
-}, 120000);
+
+  try {
+    regresarPass()
+  //enviar(correo);
+  res.status(200).send();
+  } catch (error) {
+    res.status(500).send();
+  }
+}, 5000);
 })
 
 
 async function remplazarpass(contra, correo){
   let conn;
     conn = await oracledb.getConnection(connection)
-    const result = await conn.execute("CALL restablecerContra('"+contra+"', '"+correo+"')",{},{autoCommit:true})
+    await conn.execute("CALL restablecerContra('"+contra+"', '"+correo+"')",{},{autoCommit:true})
+    await conn.rollback()
+    console.log('Wow! Si pude!')
+
+  
+}
+
+async function regresarPass(){
+  let conn;
+    conn = await oracledb.getConnection(connection)
+    const result = await conn.execute(" ROLLBACK",{})
     console.log('Wow! Si pude!')
 
   
@@ -226,7 +224,7 @@ async function remplazarpass(contra, correo){
 
 app.get("/", (req,  res) =>{ 
   res.send("hola mundo!");
-  enviar();
+  //enviar();
 })
 
 
