@@ -22,6 +22,9 @@ import { ResetContraComponent } from './components/reset-contra/reset-contra.com
 import { MenuJugadoresComponent } from './components/menu-jugadores/menu-jugadores.component';
 import { MenuDTComponent } from './components/menu-dt/menu-dt.component';
 import { EstadiosComponent } from './components/estadios/estadios.component';
+import { MenuPartidosComponent } from './components/menu-partidos/menu-partidos.component';
+import { MenuCompetenciasComponent } from './components/menu-competencias/menu-competencias.component';
+import { ConsultaComponent } from './components/consulta/consulta.component';
 
 
 
@@ -41,6 +44,9 @@ import { EstadiosComponent } from './components/estadios/estadios.component';
     MenuJugadoresComponent,
     MenuDTComponent,
     EstadiosComponent,
+    MenuPartidosComponent,
+    MenuCompetenciasComponent,
+    ConsultaComponent,
 
   ],
   imports: [

@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router'
 
 @Component({
   selector: 'app-estadios',
   templateUrl: './estadios.component.html',
   styleUrls: ['./estadios.component.css']
 })
-export class EstadiosComponent implements OnInit {
+export class EstadiosComponent  {
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
-  ngOnInit(): void {
+  Regresar(){
+    this.router.navigate(['./usuarioHome'])
   }
 
 }

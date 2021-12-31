@@ -2,20 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 
 @Component({
-  selector: 'app-menu-equipos',
-  templateUrl: './menu-equipos.component.html',
-  styleUrls: ['./menu-equipos.component.css']
+  selector: 'app-menu-partidos',
+  templateUrl: './menu-partidos.component.html',
+  styleUrls: ['./menu-partidos.component.css']
 })
-export class MenuEquiposComponent  {
+export class MenuPartidosComponent  {
 
   constructor(
     private router: Router
   ) { }
 
-  ngOnInit(): void {
-  }
-  
   Regresar(){
     this.router.navigate(['./usuarioHome'])
   }
+
 }
