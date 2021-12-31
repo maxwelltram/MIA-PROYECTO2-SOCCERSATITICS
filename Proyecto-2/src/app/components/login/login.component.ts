@@ -69,7 +69,6 @@ this.router.navigate(['/about']);
 
     })
     
-   
   }
 
   Recuperar(){

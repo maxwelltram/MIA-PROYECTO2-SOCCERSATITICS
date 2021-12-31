@@ -12,15 +12,11 @@ export class EmpleadoHomeComponent   {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
-  }
   
-  MenuJugadores(){
-    //this.router.navigate(['/jugadoresMenu']);
+  ConsultaGlobal(){
+    this.router.navigate(['/consultaRep']);
   }
 
-  MenuEquipos(){
-    //this.router.navigate(['./equiposMenu']);
-  }
+
 
 }
