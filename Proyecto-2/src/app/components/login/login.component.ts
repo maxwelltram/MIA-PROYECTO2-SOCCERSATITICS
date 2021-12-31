@@ -48,12 +48,12 @@ this.router.navigate(['/about']);
           alert("Bienvenido Admin")
 
         }else if (busqueda[0]["TIPO"] == 2) {
-          this.router.navigate(['/about'])
+          this.router.navigate(['/empleadoHome'])
           localStorage.setItem("tipo", "empleado")
           localStorage.setItem("user", busqueda[0]["CORREO"])
           alert("Bienvenido Empleado")
         }else{
-          this.router.navigate(['/about'])
+          this.router.navigate(['/usuarioHome'])
           localStorage.setItem("tipo", "cliente")
           localStorage.setItem("user", busqueda[0]["CORREO"])
           alert("Bienvenido Usuario")

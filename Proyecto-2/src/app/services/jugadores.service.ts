@@ -1,0 +1,36 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class JugadoresService {
+
+  constructor(private http: HttpClient) { }
+
+  headers: HttpHeaders = new HttpHeaders({
+    "Content-Type": "aplication/json"
+  });
+
+  obtenerEdadesMay(edad : any):Observable<any>{
+    const url = "http://localhost:3000/jugadorXedad";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEdadesMen(edad : any):Observable<any>{
+    const url = "http://localhost:3000/jugadorXedadMen";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEquipos(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/jugadorXequipo";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+}

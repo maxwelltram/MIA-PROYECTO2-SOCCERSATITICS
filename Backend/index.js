@@ -7,6 +7,8 @@ const { outFormat } = require("oracledb");
 const cors = require('cors');
 const nodemailer = require("nodemailer");//instalar paquete npm install nodemailer
 const app = express();
+const path = require('path');
+const convertCsvToXlsx = require('@aternus/csv-to-xlsx');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -114,6 +116,21 @@ app.get("/getUsers",(req, res)=>{
 
 
 app.post("/AccesoLogin", (req,  res) =>{ 
+  var body='';
+  var ruta;
+  var cadenaJson;
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson= JSON.parse(body);
+
+  });
+
+  req.on('end', ()=>{
+
+    
+
+  })
+
   oracledb.getConnection(connection, function (err, connection) {
     if (err) {
         // Error connecting to DB
@@ -125,7 +142,7 @@ app.post("/AccesoLogin", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM usuarios", {}, {
+    connection.execute("SELECT * FROM usuarios where correo = '"+cadenaJson["usuario"]+"'", {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -224,9 +241,23 @@ async function regresarPass(){
 
 app.get("/", (req,  res) =>{ 
   res.send("hola mundo!");
-  //enviar();
-})
+  convertir()
+}
+)
 
+
+function convertir(){
+  
+  var __dirname = path.dirname(require.main.filename);
+  let source = path.join(__dirname, 'archivoPartidos.csv');
+  let destination = path.join(__dirname, 'converted_report.xlsx');
+  
+  try {
+    convertCsvToXlsx(source, destination);
+  } catch (e) {
+    console.error(e.toString());
+  }
+}
 
 app.post("/jugadorXedad", (req,  res) =>{ 
   var hoy = new Date();
@@ -261,7 +292,7 @@ app.post("/jugadorXedad", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM jugador where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+    connection.execute("SELECT jugador.nombres_apellidos as nombre, jugador.fecha_nacimiento as fecha, posicion.nombre as posicion, pais.nombre as pais  FROM jugador inner join posicion on posicion.id=jugador.posicion inner join pais on pais.id=jugador.pais where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -273,7 +304,8 @@ app.post("/jugadorXedad", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          jugadores = {Jugadores:result.rows }
+          res.status(200).send(JSON.stringify(jugadores));
         }
         
     });
@@ -375,7 +407,7 @@ app.post("/jugadorXedadMen", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM jugador where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+    connection.execute("SELECT jugador.nombres_apellidos as nombre, jugador.fecha_nacimiento as fecha, posicion.nombre as posicion, pais.nombre as pais  FROM jugador inner join posicion on posicion.id=jugador.posicion inner join pais on pais.id=jugador.pais where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -387,7 +419,8 @@ app.post("/jugadorXedadMen", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          jugadores = {Jugadores:result.rows }
+          res.status(200).send(JSON.stringify(jugadores));
         }
         
     });
@@ -938,7 +971,7 @@ app.post("/jugadorXequipo", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM jugador inner join equipo on nombres= '"+nombre+"' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo and participante.fecha_fin= null " , {}, {
+    connection.execute("SELECT jugador.nombres_apellidos as nombre, jugador.fecha_nacimiento as fecha, posicion.nombre as posicion, pais.nombre as pais  FROM jugador inner join posicion on posicion.id=jugador.posicion inner join pais on pais.id=jugador.pais inner join equipo on equipo.nombres= '"+nombre+"' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo" , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -950,7 +983,8 @@ app.post("/jugadorXequipo", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          jugadores = {Jugadores:result.rows }
+          res.status(200).send(JSON.stringify(jugadores));
         }
         
     });
@@ -958,7 +992,7 @@ app.post("/jugadorXequipo", (req,  res) =>{
 
   
 })
-
+//SELECT jugador.nombres_apellidos as nombre, jugador.fecha_nacimiento as fecha, (select nombre from posicion where posicion.id=jugador.posicion)  as posicion, (select nombre from pais where pais.id=jugador.pais) as pais  FROM jugador inner join equipo on equipo.nombres= 'Municipal' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo and participante.fecha_fin= null 
 app.post("/directorXequipo", (req,  res) =>{ 
   var body='';
   var nombre;
