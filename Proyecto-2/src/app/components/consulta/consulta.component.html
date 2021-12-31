@@ -1,0 +1,23 @@
+<div class="login">
+    <form class="custom-form" method="post">
+
+        <div class="page-header">
+            <h1>Generación de reportes</h1>
+            <br>
+            <h3>Escriba la consulta a realizar:</h3>
+            <hr class="my-4">
+          </div>
+
+      <input
+        type="consulta"
+        
+        name="consulta"
+        placeholder="consulta"
+        required="required"
+        [(ngModel)]="consulta"
+      />
+      <button type="submit" (click)="IngresarConsulta(consulta)">Realizar reporte</button>
+      <br>
+
+    </form>
+  </div>

@@ -22,5 +22,14 @@ export class UsuarioHomeComponent {
     MenuEquipo(){
       this.router.navigate(['./equiposMenu'])
     }
+    MenuEstadios(){
+      this.router.navigate(['./estadiosMenu'])
+    }
+    MenuPartidos(){
+      this.router.navigate(['./partidosMenu'])
+    }
+    MenuCompetencias(){
+      this.router.navigate(['./competenciasMenu'])
+    }
 
 }
