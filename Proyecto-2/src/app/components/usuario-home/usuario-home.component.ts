@@ -15,6 +15,9 @@ export class UsuarioHomeComponent {
     MenuJugadores(){
       this.router.navigate(['./jugadoresMenu'])
     }
+    MenuDt(){
+      this.router.navigate(['./menuDt'])
+    }
 
     MenuEquipo(){
       this.router.navigate(['./equiposMenu'])
