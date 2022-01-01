@@ -56,4 +56,26 @@ export class JugadoresService {
     return this.http.post<any>(url,equipos,{headers});
   }
 
+
+  obtenerEquipoCompeticion(edad : any):Observable<any>{
+    const url = "http://localhost:3000/equipoXcompeticion";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEquipoPais(edad : any):Observable<any>{
+    const url = "http://localhost:3000/equipoXpais";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEquipoAntiguedad(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/equipoXantiguedad";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+
 }
