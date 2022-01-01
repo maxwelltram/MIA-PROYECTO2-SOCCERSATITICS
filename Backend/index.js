@@ -347,7 +347,7 @@ app.post("/directorXedad", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM directort where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+    connection.execute("SELECT directort.nombres_apellidos as nombre, directort.fecha_nacimiento as fecha, pais.nombre as pais  FROM directort inner join pais on pais.id=directort.pais  where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -359,7 +359,8 @@ app.post("/directorXedad", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          directores = {Directores:result.rows }
+          res.status(200).send(JSON.stringify(directores));
         }
         
     });
@@ -462,7 +463,7 @@ app.post("/directorXedadMen", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM directort where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
+    connection.execute("SELECT directort.nombres_apellidos as nombre, directort.fecha_nacimiento as fecha, pais.nombre as pais  FROM directort inner join pais on pais.id=directort.pais   where fecha_nacimiento BETWEEN TO_DATE('"+antesPrim.toLocaleDateString()+"','DD/MM/YYYY') and TO_DATE('"+antes.toLocaleDateString()+"','DD/MM/YYYY') " , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -474,7 +475,8 @@ app.post("/directorXedadMen", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          directores = {Directores:result.rows }
+          res.status(200).send(JSON.stringify(directores));
         }
         
     });
@@ -924,7 +926,7 @@ app.post("/directorXequipo", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM directort inner join equipo on nombres= '"+nombre+"' inner join direccion on directort.id=direccion.directort and equipo.id=direccion.equipo and equipo.id=direccion.equipo" , {}, {
+    connection.execute("SELECT directort.nombres_apellidos as nombre, directort.fecha_nacimiento as fecha, pais.nombre as pais  FROM directort inner join pais on pais.id=directort.pais   inner join equipo on nombres= '"+nombre+"' inner join direccion on directort.id=direccion.directort and equipo.id=direccion.equipo and equipo.id=direccion.equipo" , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -936,7 +938,8 @@ app.post("/directorXequipo", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          directores = {Directores:result.rows }
+          res.status(200).send(JSON.stringify(directores));
         }
         
     });
@@ -989,7 +992,6 @@ app.post("/jugadorXequipo", (req,  res) =>{
         
     });
 });
-
   
 })
 //SELECT jugador.nombres_apellidos as nombre, jugador.fecha_nacimiento as fecha, (select nombre from posicion where posicion.id=jugador.posicion)  as posicion, (select nombre from pais where pais.id=jugador.pais) as pais  FROM jugador inner join equipo on equipo.nombres= 'Municipal' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo and participante.fecha_fin= null 
@@ -1015,7 +1017,7 @@ app.post("/directorXequipo", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM directort inner join equipo on nombres= '"+nombre+"' inner join direccion on directort.id=direccion.directort and equipo.id=direccion.equipo" , {}, {
+    connection.execute("SELECT directort.nombres_apellidos as nombre, directort.fecha_nacimiento as fecha, pais.nombre as pais  FROM directort inner join pais on pais.id=jugador.pais inner join equipo on nombres= '"+nombre+"' inner join direccion on directort.id=direccion.directort and equipo.id=direccion.equipo" , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {

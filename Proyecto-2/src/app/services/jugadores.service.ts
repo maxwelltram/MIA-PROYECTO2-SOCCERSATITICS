@@ -33,4 +33,27 @@ export class JugadoresService {
 
     return this.http.post<any>(url,equipos,{headers});
   }
+
+
+  obtenerEdadesMayD(edad : any):Observable<any>{
+    const url = "http://localhost:3000/directorXedad";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEdadesMenD(edad : any):Observable<any>{
+    const url = "http://localhost:3000/directorXedadMen";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEquiposD(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/directorXequipo";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+
 }
