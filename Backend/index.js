@@ -663,7 +663,7 @@ app.post("/estadioXpais", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM estadio inner join pais on pais.nombre= '"+nombre+"' and pais.id=estadio.pais" , {}, {
+    connection.execute("SELECT estadio.nombres as nombre, estadio.capacidad as capacidad, pais.nombre as pais , estadio.direccion as dir, estadio.fecha_inauguracion as fecha FROM estadio inner join pais on pais.id=estadio.pais and pais.nombre= '"+nombre+"' and pais.id=estadio.pais" , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -675,7 +675,8 @@ app.post("/estadioXpais", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          estadios = {Estadios:result.rows }
+          res.status(200).send(JSON.stringify(estadios));
         }
         
     });
@@ -707,7 +708,7 @@ app.post("/estadioXcapacidad", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM estadio where capacidad="+capacidad , {}, {
+    connection.execute("SELECT estadio.nombres as nombre, estadio.capacidad as capacidad, pais.nombre as pais , estadio.direccion as dir, estadio.fecha_inauguracion as fecha FROM estadio inner join pais on pais.id=estadio.pais where estadio.capacidad<="+capacidad , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -719,7 +720,8 @@ app.post("/estadioXcapacidad", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          estadios = {Estadios:result.rows }
+          res.status(200).send(JSON.stringify(estadios));
         }
         
     });

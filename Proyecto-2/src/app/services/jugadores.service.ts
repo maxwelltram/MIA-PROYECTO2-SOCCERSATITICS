@@ -78,4 +78,18 @@ export class JugadoresService {
     return this.http.post<any>(url,equipos,{headers});
   }
 
+  obtenerEstadiosPais(edad : any):Observable<any>{
+    const url = "http://localhost:3000/estadioXpais";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,edad,{headers});
+  }
+
+  obtenerEstadiosCapacidad(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/estadioXcapacidad";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+
 }
