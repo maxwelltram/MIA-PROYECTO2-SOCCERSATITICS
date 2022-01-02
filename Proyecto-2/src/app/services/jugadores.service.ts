@@ -108,7 +108,26 @@ export class JugadoresService {
 
     return this.http.post<any>(url,equipos,{headers});
   }
-
   
+  obtenerPartidoGoles(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/partidosXgoles";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+
+  obtenerPartidoEquipos(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/partidosXequipo";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http.post<any>(url,equipos,{headers});
+  }
+
+  obtenerCompetenciaEquipos(equipos : any):Observable<any>{
+    const url = "http://localhost:3000/competenciaXvecesYequipo";
+    var headers = new HttpHeaders().set("Content-Type", "application/json");
+    console.log(equipos)
+    return this.http.post<any>(url,equipos,{headers});
+  }
 
 }

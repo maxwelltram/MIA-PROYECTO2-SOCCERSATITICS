@@ -37,8 +37,21 @@ export class RegistrarComponent {
       this.dir,this.pais);
   }*/
   Registrar(){
-    var usuario ={nombre:this.nombre,apellido:this.apellido,email:this.email,pass:this.password,telefono:this.telefono,genero:this.genero,fechan:this.fechaN,fechar:this.fechaR, dir:this.dir,pais:this.pais};
-    this.registrarService.InsertUser(usuario).subscribe(Response => {null});;
+      var usuario ={nombre:this.nombre,apellido:this.apellido,email:this.email,pass:this.password,telefono:this.telefono,genero:this.genero,fechan:this.fechaN,fechar:this.fechaR, dir:this.dir,pais:this.pais};
+      var ok;
+        this.registrarService.InsertUser(usuario).subscribe((error: Error)=>{
+          console.log(error);
+          
+        })
+        this.router.navigate(['./login'])
+
+        alert("XD")
+
+      
+      
+
+
+    
   
   }
   

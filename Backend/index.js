@@ -59,7 +59,6 @@ app.post("/AddUser", (req,  res) =>{
   var body='';
   var ruta;
   var cadenaJson;
-  res.send("ADD User");
   req.on('data', data =>{
       body+=data;
 
@@ -67,13 +66,13 @@ app.post("/AddUser", (req,  res) =>{
 
   req.on('end', ()=>{
     console.log(body);
-    res.statusCode=200;
-    //res.setHeader('Content-Type', 'application/json');
+    
     cadenaJson= JSON.parse(body);
     console.log(cadenaJson);
 
     insertarUsuario(cadenaJson);
-    
+    res.status(200).send("ADD User");
+
 
     res.end();
 })
@@ -731,48 +730,6 @@ app.post("/estadioXcapacidad", (req,  res) =>{
 })
 
 
-app.post("/partidosXequipo", (req,  res) =>{ 
-  var body='';
-  var nombre;
-  var cadenaJson;
-  //res.send("Cargar Estadios");
-  req.on('data', data =>{
-      body+=data;
-      cadenaJson = JSON.parse(body);
-      nombre = cadenaJson['nombre']
-
-  });
-  oracledb.getConnection(connection, function (err, connection) {
-    if (err) {
-        // Error connecting to DB
-        res.set('Content-Type', 'application/json');
-        res.status(500).send(JSON.stringify({
-            status: 500,
-            message: "Error connecting to DB",
-            detailed_message: err.message
-        }));
-        return;
-    }
-    connection.execute("SELECT * FROM partido inner join equipo on equipo.nombres= '"+nombre+"' and (equipo.id=partido.visita or equipo.id=partido.local)" , {}, {
-      outFormat: oracledb.OBJECT // Return the result as Object
-    }, function (err, result) {
-        if (err) {
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error getting the dba_tablespaces",
-                detailed_message: err.message
-            }));
-        } else {
-          res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
-        }
-        
-    });
-});
-
-  
-})
 
 
 
@@ -798,7 +755,7 @@ app.post("/partidosXequipo", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM partido inner join equipo on equipo.nombres= '"+nombre+"' and (equipo.id=partido.visita or equipo.id=partido.local)" , {}, {
+    connection.execute("SELECT (select equipo.nombres from equipo where partido.local = equipo.id) as local,(select equipo.nombres from equipo where  partido.visita = equipo.id) as visita  , partido.FECHA AS fecha, estadio.NOMBRES AS estadio, partido.resultado as resultado FROM partido INNER JOIN estadio ON estadio.ID = partido.ESTADIO inner join equipo on equipo.nombres= '"+nombre+"' and (equipo.id=partido.visita or equipo.id=partido.local)" , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -810,7 +767,8 @@ app.post("/partidosXequipo", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          partidos = {Partidos:result.rows }
+          res.status(200).send(JSON.stringify(partidos));
         }
         
     });
@@ -818,6 +776,54 @@ app.post("/partidosXequipo", (req,  res) =>{
 
   
 })
+
+
+
+app.post("/competenciaXvecesYequipo", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+      veces = cadenaJson['veces']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT competencia.NOMBRE AS nombre, competencia.ANIO AS anio, pais.NOMBRE AS pais, equipo.NOMBRES AS campeon FROM COMPETENCIA INNER JOIN EQUIPO ON competencia.CAMPEON = equipo.ID INNER JOIN pais ON pais.id = COMPETENCIA.PAIS where equipo.NOMBRES ='"+nombre+"' and ROWNUM <="+veces , {}, {
+      outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          competencia = {Competencias:result.rows }
+          res.status(200).send(JSON.stringify(competencia));
+        }
+        
+    });
+});
+
+  
+})
+
 
 
 app.post("/partidosXgoles", (req,  res) =>{ 
@@ -842,7 +848,7 @@ app.post("/partidosXgoles", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM partido inner join incidencias on incidencia.detalle= 'gol' group by partido.id order desc where ROWNUM >= "+cantidad , {}, {
+    connection.execute("SELECT (select equipo.nombres from equipo inner join partido on partido.id=PART and partido.local = equipo.id) as local,(select equipo.nombres from equipo inner join partido on partido.id=PART and partido.visita = equipo.id) as visita , PART ,goles, partido.FECHA AS fecha, estadio.NOMBRES AS estadio, partido.resultado as resultado FROM (SELECT incidencia.PARTIDO AS PART, COUNT(incidencia.PARTIDO) AS goles FROM INCIDENCIA INNER JOIN partido ON partido.id= INCIDENCIA.partido WHERE INCIDENCIA.detalle='gol'GROUP BY incidencia.PARTIDO ) INNER JOIN partido ON PART=partido.id INNER JOIN estadio ON estadio.ID = partido.ESTADIO WHERE goles<="+cantidad , {}, {
       outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -854,7 +860,8 @@ app.post("/partidosXgoles", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          partidos = {Partidos:result.rows }
+          res.status(200).send(JSON.stringify(partidos));
         }
         
     });
@@ -1611,14 +1618,17 @@ async function insertarUsuario(datos){
     
     console.log("aqui")
     console.log('USUARIO REGISTRADO CORRECTAMENTE');  
+    
   } catch (err) {
     console.log(datos["nombre"]+"\tPrueba")
     console.log('Ouch!', err)
+    
   } finally {
     if (conn) {
       await conn.close()
     }
   }
+}
 
 async  function insertarEquipos(datos){
     for(const itemFile of datos){
@@ -2356,4 +2366,3 @@ function consultaSelectGenero(){
         });
     });
   }
-}

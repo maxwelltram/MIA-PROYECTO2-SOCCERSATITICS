@@ -25,10 +25,9 @@ export class UserService {
   {      
     var headers = new HttpHeaders().set("Content-Type", "application/json");
     console.log(usuario);
-    console.log("holamundo");
     
   const url = "http://localhost:3000/AddUser";
-  return this.http.post(url, usuario, {headers});
+  return this.http.post<any>(url,usuario,{headers});
 
 }
   //TODO : UPDATE USER
