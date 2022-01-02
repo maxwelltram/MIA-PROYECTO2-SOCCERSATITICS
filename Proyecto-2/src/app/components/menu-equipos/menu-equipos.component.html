@@ -25,6 +25,15 @@
             [(ngModel)]="edad" 
             style="width: 175px; "> <button type="submit" style="width: 175px;" (click)="antiguedad()" >X Antiguedad</button>  </div>
           
+            <div style="float: left;"><input type="nombre"
+              name="nombre"
+              placeholder="nombre"
+              required="required"
+              [(ngModel)]="nombre"
+               style="width: 200px; height: auto; " ></div>
+            <div style="float: left;"><button type="submit" style="width: 175px; height: 40px; " (click)="jugadores()">X jugador</button>
+              <button type="submit" style="width: 175px; height: 40px;" (click)="jugadores()" >X director</button></div>
+
                
         </div>
 
@@ -40,7 +49,9 @@
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">Pais</th>
-            <th scope="col">Fecha de Nacimiento</th>
+            <th scope="col">Fecha de Fundacion</th>
+            <th scope="col">Fecha de Inicio</th>
+            <th scope="col">Fecha de Fin</th>
           </tr>
         </thead>
         <tbody>
@@ -56,6 +67,12 @@
             </td>
             <td>
               {{equipo.FECHA}}
+            </td>
+            <td>
+              {{equipo.INICIO}}
+            </td>
+            <td>
+              {{equipo.SALIDA}}
             </td>
         </tr>
         </tbody>

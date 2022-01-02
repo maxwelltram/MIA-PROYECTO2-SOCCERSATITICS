@@ -888,7 +888,7 @@ app.post("/jugadorEstuvoXequipo", (req,  res) =>{
         }));
         return;
     }
-    connection.execute("SELECT * FROM jugador inner join equipo on nombres= '"+nombre+"' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo" , {}, {
+    connection.execute("SELECT equipo.nombres as nombre, equipo.fecha_fundacion as fecha, participante.fecha_in as inicio, participante.fecha_fin as salida, pais.nombre as pais FROM equipo inner join pais on pais.id=equipo.pais inner join jugador on jugador.nombres_apellidos= '"+nombre+"' inner join participante on jugador.id=participante.jugador and equipo.id=participante.equipo" , {}, {
         outFormat: oracledb.OBJECT // Return the result as Object
     }, function (err, result) {
         if (err) {
@@ -900,7 +900,8 @@ app.post("/jugadorEstuvoXequipo", (req,  res) =>{
             }));
         } else {
           res.set('Content-Type', 'application/json');
-          res.status(200).send(JSON.stringify(result));
+          equipos = {Equipos:result.rows }
+          res.status(200).send(JSON.stringify(equipos));
         }
         
     });

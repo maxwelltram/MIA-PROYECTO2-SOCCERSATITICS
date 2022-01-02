@@ -20,7 +20,7 @@ export class MenuEquiposComponent implements OnInit {
   lista: any[]=[];
   
   competicion:string = "";
-
+  nombre:string = "";
   edad:string = "";
   pais:string = "";
 
@@ -68,7 +68,22 @@ export class MenuEquiposComponent implements OnInit {
 
     })
     
+
    
+  }
+
+
+  jugadores(){
+    console.log(this.edad)
+    var jugador={nombre: this.nombre};
+    
+
+    
+    this.jugadorService.obtenerEquipoJugador(jugador).subscribe((dataList: any)=>{
+      this.lista=dataList["Equipos"];
+      console.log("Listita",this.lista)
+      console.log(this.lista[0].NOMBRE)
+    })
   }
 
 
