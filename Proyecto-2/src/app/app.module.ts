@@ -25,6 +25,8 @@ import { EstadiosComponent } from './components/estadios/estadios.component';
 import { MenuPartidosComponent } from './components/menu-partidos/menu-partidos.component';
 import { MenuCompetenciasComponent } from './components/menu-competencias/menu-competencias.component';
 import { ConsultaComponent } from './components/consulta/consulta.component';
+import { MenuEquiposComponent } from './components/menu-equipos/menu-equipos.component';
+import { NoticiasComponent } from './components/noticias/noticias.component';
 
 
 
@@ -47,7 +49,8 @@ import { ConsultaComponent } from './components/consulta/consulta.component';
     MenuPartidosComponent,
     MenuCompetenciasComponent,
     ConsultaComponent,
-
+    MenuEquiposComponent,
+    NoticiasComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,46 +2,68 @@
   <div class="login">
     <form class="custom-form" method="post">
       <div class="page-header">
-        <h1>Tabla de competencias</h1>
+        <h1>Tabla de Competencias</h1>
+        <div>
+          <div style="float: left;"> <input type="equipo"
+            name="equipo"
+            placeholder="equipo"
+            required="required"
+            [(ngModel)]="equipo" 
+            style="width: 200px; "> </div>    
+            
+            <div style="float: left;"><input type="veces"
+            name="veces"
+            placeholder="veces"
+            required="required"
+            [(ngModel)]="cantidad" 
+             style="width: 125px; height: auto; " ></div>
+          <div style="float: left;"><button type="submit" style="width: 175px; height: 40px; " (click)="equipos()">X Veces Y Equipo</button></div>
+          
+               
+        </div>
+
         <br>
         <hr class="my-4">
+        
       </div>
 
-
+      <ng-container *ngIf="lista">
       <table class="table table-striped table-dark">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Anyo</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Campeon</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          <tr *ngFor="let competencia of lista; let i = index">
+            <td>
+                {{i+1}}
+            </td> 
+            <td>
+              {{competencia.NOMBRE}}
+            </td>
+            <td>
+              {{competencia.ANIO}}
+            </td>
+            <td>
+              {{competencia.PAIS}}
+            </td>
+            <td>
+              {{competencia.CAMPEON}}
+            </td>
+        </tr>
         </tbody>
       </table>
 
-
-      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </ng-container>
+      <button type="submit" (click)="Regresar()" >Regresar</button>
       <br>
 
     </form>
   </div>
+  
+  

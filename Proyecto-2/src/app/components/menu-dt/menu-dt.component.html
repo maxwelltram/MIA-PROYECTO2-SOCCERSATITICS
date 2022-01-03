@@ -1,1 +1,69 @@
-<p>menu-dt works!</p>
+
+  <div class="login">
+    <form class="custom-form" method="post">
+      <div class="page-header">
+        <h1>Tabla de directores tecnicos</h1>
+        <div>
+          <div style="float: left;"> <input type="equipo"
+            name="equipo"
+            placeholder="equipo"
+            required="required"
+            [(ngModel)]="equipo" 
+            style="width: 125px; "> </div>    
+            
+            
+          <div style="float: left;"> <button type="submit" style="width: 125px;" (click)="equipos()" >X Equipo</button>  </div>
+          <div style="float: left;"><input type="edad"
+            name="edad"
+            placeholder="edad"
+            required="required"
+            [(ngModel)]="edad"
+             style="width: 75px; height: auto; " ></div>
+          <div style="float: left;"><button type="submit" style="width: 175px; height: 40px; " (click)="edadesMayor()">Mayor X edad</button>
+            <button type="submit" style="width: 175px; height: 40px;" (click)="edadesMenor()" >Menor X edad</button></div>
+          
+               
+        </div>
+
+        <br>
+        <hr class="my-4">
+        
+      </div>
+
+      <ng-container *ngIf="lista">
+      <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Fecha de Nacimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let director of lista; let i = index">
+            <td>
+                {{i+1}}
+            </td>
+            <td>
+              {{director.NOMBRE}}
+            </td>
+            <td>
+              {{director.PAIS}}
+            </td>
+            <td>
+              {{director.FECHA}}
+            </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </ng-container>
+      <button type="submit" (click)="Regresar()" >Regresar</button>
+      <br>
+
+    </form>
+  </div>
+  
+  
+  
