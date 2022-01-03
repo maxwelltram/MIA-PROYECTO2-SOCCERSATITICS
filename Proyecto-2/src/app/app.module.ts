@@ -26,6 +26,7 @@ import { MenuPartidosComponent } from './components/menu-partidos/menu-partidos.
 import { MenuCompetenciasComponent } from './components/menu-competencias/menu-competencias.component';
 import { ConsultaComponent } from './components/consulta/consulta.component';
 import { MenuEquiposComponent } from './components/menu-equipos/menu-equipos.component';
+import { NoticiasComponent } from './components/noticias/noticias.component';
 
 
 
@@ -49,6 +50,7 @@ import { MenuEquiposComponent } from './components/menu-equipos/menu-equipos.com
     MenuCompetenciasComponent,
     ConsultaComponent,
     MenuEquiposComponent,
+    NoticiasComponent,
   ],
   imports: [
     BrowserModule,

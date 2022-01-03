@@ -50,6 +50,16 @@ async function enviar (correo, contra){
     console.log("Correo Enviado!")
 }
 
+async function enviarVerificacion (correo){
+  let info = await transporter.sendMail({
+      from: '"Soccer Statics" <soccerstatsmia2021@gmail.com>', // sender address
+      to: correo, // list of receivers
+      subject: "Verificar Cuenta", // Subject line
+      text: "Hola! \nPara poder utilizar su cuenta requerimos de la confirmacion de su cuenta, debe hacer click en el siguiente enlace http://127.0.0.1:4200/login e iniciar sesion.", // plain text body
+    });
+  console.log("Correo Enviado!")
+}
+
 
 
 
@@ -69,8 +79,10 @@ app.post("/AddUser", (req,  res) =>{
     
     cadenaJson= JSON.parse(body);
     console.log(cadenaJson);
-
+    console.log(cadenaJson["email"])
     insertarUsuario(cadenaJson);
+
+    enviarVerificacion(cadenaJson["email"])
     res.status(200).send("ADD User");
 
 
