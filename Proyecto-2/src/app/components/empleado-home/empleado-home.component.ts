@@ -20,5 +20,12 @@ export class EmpleadoHomeComponent   {
   CargaMasiva(){
     this.router.navigate(['/cargaMasiva']);
   }
+  
+
+
+  pagNoticias(){
+    this.router.navigate(['/noticias']);
+  }
+
 
 }

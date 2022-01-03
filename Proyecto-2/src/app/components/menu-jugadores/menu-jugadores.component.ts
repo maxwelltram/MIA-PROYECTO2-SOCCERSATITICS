@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
-import { ArrJugador, Jugador } from 'src/app/modelos/jugador.model';
 import { JugadoresService } from 'src/app/services/jugadores.service';
 
 @Component({
@@ -18,8 +17,7 @@ export class MenuJugadoresComponent  {
   
   ngOnInit(): void {
   }
-  listaAux: ArrJugador = new ArrJugador();
-  listaJugadores:Jugador[]=[];
+  
   lista: any[]=[];
 
   edad:string = "";
@@ -33,14 +31,11 @@ export class MenuJugadoresComponent  {
 
     
     this.jugadorService.obtenerEquipos(equipo).subscribe((dataList: any)=>{
-      this.listaAux.Jugadores=dataList;
       this.lista=dataList["Jugadores"];
       console.log("Listita",this.lista)
       console.log(this.lista[0].NOMBRE)
 
-      console.log("Aux",this.listaAux)
-      this.setearLista();
-      console.log("lista",this.listaJugadores)
+      
     })
   }
   edadesMayor(){
@@ -51,14 +46,11 @@ export class MenuJugadoresComponent  {
 
     
     this.jugadorService.obtenerEdadesMay(edad).subscribe((dataList: any)=>{
-      this.listaAux.Jugadores=dataList;
       this.lista=dataList["Jugadores"];
       console.log("Listita",this.lista)
       console.log(this.lista[0].NOMBRE)
 
-      console.log("Aux",this.listaAux)
-      this.setearLista();
-      console.log("lista",this.listaJugadores)
+   
     })
     
    
@@ -72,29 +64,16 @@ export class MenuJugadoresComponent  {
 
     
     this.jugadorService.obtenerEdadesMen(edad).subscribe((dataList: any)=>{
-      this.listaAux.Jugadores=dataList;
       this.lista=dataList["Jugadores"];
       console.log("Listita",this.lista)
       console.log(this.lista[0].NOMBRE)
 
-      console.log("Aux",this.listaAux)
-      this.setearLista();
-      console.log("lista",this.listaJugadores)
     })
     
    
   }
 
 
-  setearLista(){
-    
-    for (let i = 0; i < this.listaAux.Jugadores.length; i++) {
-      var jugador: Jugador      
-      jugador = new Jugador(this.listaAux.Jugadores[i].Nombre,this.listaAux.Jugadores[i].Fecha,this.listaAux.Jugadores[i].Pais,this.listaAux.Jugadores[i].Posicion,)
-      this.listaJugadores.push(jugador);
-      console.log(i)
-    }
-  }
 
 
   Regresar(){

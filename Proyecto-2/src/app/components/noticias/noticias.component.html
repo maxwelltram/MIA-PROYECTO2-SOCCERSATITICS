@@ -4,16 +4,16 @@
 <form>
     <div class="form-group">
       <label for="exampleInputEmail1">Titulo</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="titulo">
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="titulo" [(ngModel)]="titulo">
     </div>
     <div class="form-group">
         <label for="exampleInputEmail1">Equipo</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="equipo">
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="equipo" [(ngModel)]="equipo">
       </div>
     <div class="form-group">
       <label for="exampleFormControlTextarea1">Noticia:</label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"  name="detalle"></textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"  name="detalle" [(ngModel)]="detalle"></textarea>
     </div>
   
-    <button type="submit" class="btn btn-primary" >Enviar</button>
+    <button type="submit" class="btn btn-primary" (click)="enviar()" >Enviar </button>
   </form>

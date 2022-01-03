@@ -17,22 +17,23 @@ export class LoginComponent  {
 usuario: string="";
 password: string="";
 
- /* Ingresar(){
-console.log(this.usuario);
-var user={usuario:this.usuario,password:this.password};
-this.loginService.GetLogin(user).subscribe(Response => {null});;
+
+ngOnInit(): void {
+  console.log(localStorage.getItem("user"))
+  localStorage.clear()
+  console.log(localStorage.getItem("user"))
 
 
-this.router.navigate(['/about']);
-
-  }*/
-
-
+}
 
 
   Ingresar(){
-  
-    /*console.log(this.usuario)
+
+    if(this.usuario=="" || this.password==""){
+      alert("Completar todos los campos")  
+      return;
+    }
+    console.log(this.usuario)
     var user={usuario:this.usuario,password:this.password};
     var busqueda : any
 
@@ -45,17 +46,21 @@ this.router.navigate(['/about']);
           this.router.navigate(['/about'])
           localStorage.setItem("tipo", "admin")
           localStorage.setItem("user", busqueda[0]["CORREO"])
+          localStorage.setItem("id", busqueda[0]["ID"])
           alert("Bienvenido Admin")
 
         }else if (busqueda[0]["TIPO"] == 2) {
           this.router.navigate(['/empleadoHome'])
           localStorage.setItem("tipo", "empleado")
           localStorage.setItem("user", busqueda[0]["CORREO"])
+          localStorage.setItem("id", busqueda[0]["ID"])
+
           alert("Bienvenido Empleado")
         }else{
           this.router.navigate(['/usuarioHome'])
           localStorage.setItem("tipo", "cliente")
           localStorage.setItem("user", busqueda[0]["CORREO"])
+          localStorage.setItem("id", busqueda[0]["ID"])
           alert("Bienvenido Usuario")
         }
       }
