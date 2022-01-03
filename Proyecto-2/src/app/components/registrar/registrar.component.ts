@@ -37,6 +37,10 @@ export class RegistrarComponent {
       this.dir,this.pais);
   }*/
   Registrar(){
+    if(this.nombre=="" || this.apellido=="" || this.email==""||this.password=="" || this.telefono=="" || this.genero==""||this.fechaN=="" || this.fechaR=="" || this.dir==""||this.pais==""){
+      alert("Completar todos los campos")  
+      return;
+    }
       var usuario ={nombre:this.nombre,apellido:this.apellido,email:this.email,pass:this.password,telefono:this.telefono,genero:this.genero,fechan:this.fechaN,fechar:this.fechaR, dir:this.dir,pais:this.pais};
       var ok;
         this.registrarService.InsertUser(usuario).subscribe((error: Error)=>{
@@ -45,14 +49,7 @@ export class RegistrarComponent {
         })
         this.router.navigate(['./login'])
 
-        alert("XD")
-
-      
-      
-
-
-    
-  
+        alert("XD")  
   }
   
 

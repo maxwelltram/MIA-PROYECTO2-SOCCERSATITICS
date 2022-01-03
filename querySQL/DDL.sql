@@ -297,6 +297,15 @@ ALTER TABLE direccion
     ADD CONSTRAINT direccion_equipo_fk FOREIGN KEY (equipo)
         REFERENCES equipo ( id );
 
+
+ALTER TABLE noticia
+    ADD CONSTRAINT empleado_empleado_fk FOREIGN KEY (empleado)
+        REFERENCES usuarios ( id );
+
+ALTER TABLE noticia
+    ADD CONSTRAINT equipo_equipo_fk FOREIGN KEY (equipo)
+        REFERENCES equipo ( id );
+
  create or replace procedure restablecerContra(contra in varchar2, cor in varchar2)
     is
     begin

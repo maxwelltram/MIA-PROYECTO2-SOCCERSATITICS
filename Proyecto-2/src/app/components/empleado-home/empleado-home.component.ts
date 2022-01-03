@@ -17,6 +17,10 @@ export class EmpleadoHomeComponent   {
     this.router.navigate(['/consultaRep']);
   }
 
+  pagNoticias(){
+    this.router.navigate(['/noticias']);
+  }
+
 
 
 }

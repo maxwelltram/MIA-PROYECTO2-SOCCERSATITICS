@@ -93,6 +93,36 @@ app.post("/AddUser", (req,  res) =>{
 })
 
 
+
+app.post("/AddNoticia", (req,  res) =>{ 
+  var body='';
+  var ruta;
+  var cadenaJson;
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+    console.log(body);
+    
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    console.log(cadenaJson["titulo"])
+    console.log(cadenaJson["empleado"])
+    console.log(cadenaJson["equipo"])
+    insertarNoticia(cadenaJson);
+
+    res.status(200).send("ADD noticia");
+
+
+    res.end();
+})
+
+  
+})
+
+
 app.get("/getUsers",(req, res)=>{
   var x=2;
   oracledb.getConnection(connection, function (err, connection){
@@ -166,7 +196,7 @@ app.post("/AccesoLogin", (req,  res) =>{
         } else {
           res.set('Content-Type', 'application/json');
           res.status(200).send(JSON.stringify(result.rows));
-            console.log(result.rows);
+          console.log(result.rows);
         }
         
     });
@@ -1641,6 +1671,29 @@ async function insertarUsuario(datos){
     }
   }
 }
+
+
+
+async function insertarNoticia(datos){
+  let conn
+try {
+  conn = await oracledb.getConnection(connection)
+  
+  const result = await conn.execute("INSERT INTO noticia values(TEST_ID_SEQ.nextval, '"+datos["titulo"]+"', '"+datos["detalle"]+"', (SELECT id FROM equipo WHERE nombres='"+datos["equipo"]+"' and rownum = 1), "+datos["empleado"]+")",{},{autoCommit:true})
+  
+  console.log("aqui")
+  console.log('NOTICIA REGISTRADO CORRECTAMENTE');  
+  
+} catch (err) {
+  console.log('Ouch!', err)
+  
+} finally {
+  if (conn) {
+    await conn.close()
+  }
+}
+}
+
 
 async  function insertarEquipos(datos){
     for(const itemFile of datos){
