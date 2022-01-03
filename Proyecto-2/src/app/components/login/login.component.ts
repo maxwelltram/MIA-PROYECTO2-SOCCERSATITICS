@@ -32,7 +32,7 @@ this.router.navigate(['/about']);
 
   Ingresar(){
   
-    console.log(this.usuario)
+    /*console.log(this.usuario)
     var user={usuario:this.usuario,password:this.password};
     var busqueda : any
 
@@ -67,7 +67,8 @@ this.router.navigate(['/about']);
     },(err)=>{
     console.log("no se pudo")
 
-    })
+    })*/
+    this.router.navigate(['/usuarioHome']);
     
   }
 

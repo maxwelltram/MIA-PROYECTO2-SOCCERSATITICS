@@ -14,6 +14,10 @@ import { MenuDTComponent } from "./components/menu-dt/menu-dt.component";
 import { MenuPartidosComponent } from "./components/menu-partidos/menu-partidos.component";
 import { MenuCompetenciasComponent } from "./components/menu-competencias/menu-competencias.component";
 import { NoticiasComponent } from "./components/noticias/noticias.component";
+import { CrearUsuarioComponent } from "./components/crear-usuario/crear-usuario.component";
+import { CargaMasivaComponent } from "./components/carga-masiva/carga-masiva.component";
+import { NoticiasCliComponent } from "./components/noticias-cli/noticias-cli.component";
+
 const APP_ROUTES: Routes = [
     {path: 'home', component: HomeComponent},
     {path: 'about', component: AboutComponent},
@@ -30,7 +34,9 @@ const APP_ROUTES: Routes = [
     {path: 'partidosMenu', component:MenuPartidosComponent},
     {path: 'competenciasMenu', component:MenuCompetenciasComponent},
     {path: 'noticias', component:NoticiasComponent},
-
+    {path: 'usuarioP', component:CrearUsuarioComponent},
+    {path: 'cargaMasiva', component:CargaMasivaComponent},
+    {path: 'noticiasCli', component:NoticiasCliComponent},
     {path: '**', pathMatch:'full', redirectTo:'home'}
 ];
 

@@ -14,9 +14,11 @@ export class EmpleadoHomeComponent   {
 
   
   ConsultaGlobal(){
-    this.router.navigate(['/consultaRep']);
+    //this.router.navigate(['/consultaRep']);
+    console.log('INGRESAR CONSULTA') 
   }
-
-
+  CargaMasiva(){
+    this.router.navigate(['/cargaMasiva']);
+  }
 
 }

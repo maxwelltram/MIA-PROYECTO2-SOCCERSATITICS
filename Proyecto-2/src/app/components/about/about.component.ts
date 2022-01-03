@@ -17,5 +17,7 @@ export class AboutComponent implements OnInit {
   Reportes(){
     this.router.navigate(['/reportes']);
   }
-  
+  CrearUsuario(){
+    this.router.navigate(['/usuarioP']);
+  }
 }

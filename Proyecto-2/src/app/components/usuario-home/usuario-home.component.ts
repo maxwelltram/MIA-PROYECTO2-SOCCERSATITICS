@@ -31,5 +31,7 @@ export class UsuarioHomeComponent {
     MenuCompetencias(){
       this.router.navigate(['./competenciasMenu'])
     }
-
+    MenuNoticias(){
+      this.router.navigate(['./noticiasCli'])
+    }
 }
