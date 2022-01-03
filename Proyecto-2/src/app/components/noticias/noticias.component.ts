@@ -7,7 +7,7 @@ import { NoticiasService } from 'src/app/services/noticias.service';
   templateUrl: './noticias.component.html',
   styleUrls: ['./noticias.component.css']
 })
-export class NoticiasComponent implements OnInit {
+export class NoticiasComponent {
 
   constructor(
     private router: Router,
