@@ -28,6 +28,7 @@ ngOnInit(): void {
 
 
   Ingresar(){
+
     if(this.usuario=="" || this.password==""){
       alert("Completar todos los campos")  
       return;
@@ -71,7 +72,8 @@ ngOnInit(): void {
     },(err)=>{
     console.log("no se pudo")
 
-    })
+    })*/
+    this.router.navigate(['/usuarioHome']);
     
   }
 

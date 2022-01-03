@@ -27,6 +27,9 @@ import { MenuCompetenciasComponent } from './components/menu-competencias/menu-c
 import { ConsultaComponent } from './components/consulta/consulta.component';
 import { MenuEquiposComponent } from './components/menu-equipos/menu-equipos.component';
 import { NoticiasComponent } from './components/noticias/noticias.component';
+import { CrearUsuarioComponent } from './components/crear-usuario/crear-usuario.component';
+import { CargaMasivaComponent } from './components/carga-masiva/carga-masiva.component';
+import { NoticiasCliComponent } from './components/noticias-cli/noticias-cli.component';
 
 
 
@@ -51,6 +54,9 @@ import { NoticiasComponent } from './components/noticias/noticias.component';
     ConsultaComponent,
     MenuEquiposComponent,
     NoticiasComponent,
+    CrearUsuarioComponent,
+    CargaMasivaComponent,
+    NoticiasCliComponent,
   ],
   imports: [
     BrowserModule,
