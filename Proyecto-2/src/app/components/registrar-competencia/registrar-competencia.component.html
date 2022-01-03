@@ -1,0 +1,62 @@
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear competencia</h1>
+
+  <input
+  type="nombre"
+
+  name="nombre"
+  placeholder="Nombre"
+  required="required"
+[(ngModel)]="nombre"
+
+/>
+
+
+  <input
+  type="anio"
+  
+  name="anio"
+  placeholder="Año"
+  required="required"
+  [(ngModel)]="anio"
+
+/>
+
+<input
+type="tipo"
+
+name="tipo"
+placeholder="Tipo"
+required="required"
+[(ngModel)]="tipo"
+
+/>
+
+
+<input
+type="campeon"
+
+name="campeon"
+placeholder="Campeon"
+required="required"
+[(ngModel)]="campeon"
+
+/>
+
+<input
+type="pais"
+
+name="pais"
+placeholder="Pais"
+required="required"
+[(ngModel)]="pais"
+
+/>
+
+
+      <button type="submit" (click)='CrearCompetencia()'>Registrar competencia  </button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>

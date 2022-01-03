@@ -1,0 +1,97 @@
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear partido</h1>
+
+      <input
+      type="fecha"
+      
+      name="fecha"
+      placeholder="Fecha"
+      required="required"
+      [(ngModel)]="fecha"
+  
+  
+    />
+
+      <input
+      type="estadio"
+      
+      name="estadio"
+      placeholder="Estadio"
+      required="required"
+      [(ngModel)]="estadio"
+    />
+
+  <input
+  type="asistencia"
+
+  name="asistencia"
+  placeholder="Asistencia"
+  required="required"
+[(ngModel)]="asistencia"
+
+/>
+
+
+
+
+
+
+  <input
+  type="visita"
+
+  name="visita"
+  placeholder="Equipo visitante"
+  required="required"
+[(ngModel)]="equipoV"
+
+/>
+
+
+  <input
+  type="local"
+  
+  name="local"
+  placeholder="Equipo local"
+  required="required"
+  [(ngModel)]="equipoL"
+
+/>
+
+<input
+type="resultado"
+
+name="resultado"
+placeholder="Resultado"
+required="required"
+[(ngModel)]="resultado"
+
+/>
+
+
+<input
+type="incidencia"
+
+name="incidencia"
+placeholder="Incidencias"
+required="required"
+[(ngModel)]="incidencias"
+
+/>
+
+<input
+type="estado"
+
+name="estado"
+placeholder="Estado"
+required="required"
+[(ngModel)]="estado"
+
+/>
+
+
+      <button type="submit" (click)='CrearPartido()'>Registrar partido</button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>

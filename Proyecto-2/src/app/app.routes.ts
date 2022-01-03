@@ -17,6 +17,13 @@ import { NoticiasComponent } from "./components/noticias/noticias.component";
 import { CrearUsuarioComponent } from "./components/crear-usuario/crear-usuario.component";
 import { CargaMasivaComponent } from "./components/carga-masiva/carga-masiva.component";
 import { NoticiasCliComponent } from "./components/noticias-cli/noticias-cli.component";
+import { RegistrarJugadorComponent } from "./components/registrar-jugador/registrar-jugador.component";
+import { RegistrarDTComponent } from "./components/registrar-dt/registrar-dt.component";
+import { RegistrarEquipoComponent } from "./components/registrar-equipo/registrar-equipo.component";
+import { RegistrarEstadioComponent } from "./components/registrar-estadio/registrar-estadio.component";
+import { RegistrarPartidoComponent } from "./components/registrar-partido/registrar-partido.component";
+import { RegistrarCompetenciaComponent } from "./components/registrar-competencia/registrar-competencia.component";
+
 
 const APP_ROUTES: Routes = [
     {path: 'home', component: HomeComponent},
@@ -37,6 +44,13 @@ const APP_ROUTES: Routes = [
     {path: 'usuarioP', component:CrearUsuarioComponent},
     {path: 'cargaMasiva', component:CargaMasivaComponent},
     {path: 'noticiasCli', component:NoticiasCliComponent},
+    {path: 'registrarJugador', component:RegistrarJugadorComponent},
+    {path: 'registrarDT', component:RegistrarDTComponent},
+    {path: 'registrarEquipo', component:RegistrarEquipoComponent},
+    {path: 'registrarEstadio', component:RegistrarEstadioComponent},
+    {path: 'registrarPartido', component:RegistrarPartidoComponent},
+    {path: 'registrarCompetencia', component:RegistrarCompetenciaComponent},
+    {path: 'registrarNoticia', component:NoticiasComponent},
     {path: '**', pathMatch:'full', redirectTo:'home'}
 ];
 

@@ -1,0 +1,39 @@
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear equipo</h1>
+
+      <input
+      type="Nombre"
+      
+      name="nombre"
+      placeholder="Nombre"
+      required="required"
+      [(ngModel)]="nombre"
+    />
+    <input
+    type="pais"
+    
+    name="pais"
+    placeholder="Pais"
+    required="required"
+    [(ngModel)]="pais"
+
+
+  />
+
+  <input
+  type="fechafun"
+  
+  name="fecha"
+  placeholder="Fecha Creado"
+  required="required"
+  [(ngModel)]="fechafun"
+
+/>
+
+
+      <button type="submit" (click)='CrearEquipo()'>Registrar equipo</button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>
