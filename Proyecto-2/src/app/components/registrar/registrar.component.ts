@@ -41,7 +41,7 @@ export class RegistrarComponent {
       alert("Completar todos los campos")  
       return;
     }
-      var usuario ={nombre:this.nombre,apellido:this.apellido,email:this.email,pass:this.password,telefono:this.telefono,genero:this.genero,fechan:this.fechaN,fechar:this.fechaR, dir:this.dir,pais:this.pais};
+      var usuario ={nombre:this.nombre,apellido:this.apellido,email:this.email,pass:this.password,telefono:this.telefono,genero:this.genero,fechan:this.fechaN,fechar:this.fechaR, dir:this.dir,pais:this.pais,rol:3};
       var ok;
         this.registrarService.InsertUser(usuario).subscribe((error: Error)=>{
           console.log(error);

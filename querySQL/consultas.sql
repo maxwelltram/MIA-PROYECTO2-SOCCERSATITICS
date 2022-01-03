@@ -45,3 +45,6 @@ SELECT * FROM jugador inner join equipo on nombres= '"+nombre+"' inner join part
 --director x equipo
 
 SELECT * FROM directort inner join equipo on nombres= '"+nombre+"' inner join direccion on directort.id=direccion.directort and equipo.id=direccion.equipo
+
+-- noticias
+INSERT INTO noticia values(TEST_ID_SEQ.nextval, 'Jugadores se cayeron en el campo!', 'Los jugadores tuvieron una caida en el campo xd', (SELECT id FROM equipo WHERE nombres='Municipal' and rownum = 1), 1068)
