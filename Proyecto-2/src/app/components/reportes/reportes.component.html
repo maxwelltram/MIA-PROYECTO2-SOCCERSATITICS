@@ -5,7 +5,9 @@
         <h1>Lista de reportes</h1>
         <hr class="my-4">
       </div>
-    <button type="submit" >Reporte de usuarios suscritos a X equipo </button>
+      <input  type="x"  name="x" placeholder="x"  required="required"[(ngModel)]="varX"/>
+      <br>
+    <button type="submit" (click)="createPdf()" >Reporte de usuarios suscritos a X equipo </button>
     <br>
     <button type="submit" >Reporte de usuarios con o sin membresía </button>
     <br>    

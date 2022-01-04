@@ -37,6 +37,7 @@ import { RegistrarEstadioComponent } from './components/registrar-estadio/regist
 import { RegistrarPartidoComponent } from './components/registrar-partido/registrar-partido.component';
 import { RegistrarCompetenciaComponent } from './components/registrar-competencia/registrar-competencia.component';
 import { MembresiaComponent } from './components/membresia/membresia.component';
+import { SuscripcionComponent } from './components/suscripcion/suscripcion.component';
 
 
 
@@ -71,6 +72,7 @@ import { MembresiaComponent } from './components/membresia/membresia.component';
     RegistrarPartidoComponent,
     RegistrarCompetenciaComponent,
     MembresiaComponent,
+    SuscripcionComponent,
   ],
   imports: [
     BrowserModule,

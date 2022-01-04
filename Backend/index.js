@@ -116,6 +116,31 @@ app.post("/AddMembresia", (req,  res) =>{
 
 })
 
+
+app.post("/AddSuscripcion", (req,  res) =>{ 
+  var body='';
+  var cadenaJson;
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+    console.log(body);
+    
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    insertarSuscripcion(cadenaJson);
+
+    res.status(200).send();
+
+
+    res.end();
+});
+
+})
+
+
 app.post("/ArchivosCarga", (req,  res) =>{ 
   var body='';
   var ruta;
@@ -1301,6 +1326,234 @@ app.get("/competiciones", (req,  res) =>{
 });
 })
 
+
+app.post("/usuariosXequipo", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN SUSCRIPCION ON suscripcion.USUARIO = usuarios.id INNER JOIN EQUIPO ON equipo.ID = suscripcion.EQUIPO WHERE equipo.NOMBRES = '"+nombre+"' " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+
+
+app.post("/usuariosConMembresia", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios WHERE tipo = 4 " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+
+app.post("/usuariosSinMembresia", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios WHERE tipo = 3 " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+
+
+app.post("/usuariosXpais", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN PAIS ON pais.id = usuarios.PAIS  WHERE pais.NOMBRE = '"+nombre+"' AND (usuarios.TIPO = 3 or usuarios.TIPO = 4)" , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+
+
+app.post("/usuariosXgenero", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['genero']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN GENERO ON GENERO .id = usuarios.GENERO  WHERE GENERO .NOMBRE = '"+nombre+"' AND (usuarios.TIPO = 3 or usuarios.TIPO = 4) " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 app.get("/", (req,  res) =>{ 
     res.send("hola mundo!");
     enviar();
@@ -1479,18 +1732,62 @@ function cargarArchivo(ruta){
 
 
 
-
 async function insertarMembresia(datos){
+  let conn
+  var date = new Date();
+  try {
+    conn = await oracledb.getConnection(connection)
+  
+    const result = await conn.execute("INSERT INTO membresia VALUES(TEST_ID_SEQ.nextval, TO_DATE('"+date.toLocaleDateString()+"','DD/MM/YYYY'), "+datos["id"]+", 15)",{},{autoCommit:true})
+  
+    console.log("aqui")
+  
+   console.log('MEMBRESIA REGISTRADO CORRECTAMENTE');  
+  
+  } catch (err) {
+
+    console.log('Ouch!', err)
+    
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+  try {
+    conn = await oracledb.getConnection(connection)
+  
+    const result = await conn.execute("UPDATE usuarios SET tipo = 4 where id= "+datos["id"],{},{autoCommit:true})
+  
+    console.log("aqui")
+  
+    console.log('MEMBRESIA REGISTRADO CORRECTAMENTE');  
+  
+  } catch (err) {
+
+    console.log('Ouch!', err)
+  
+  } finally {
+    if (conn) {
+      await conn.close()
+    }
+  }
+
+}
+
+
+
+
+async function insertarSuscripcion(datos){
   let conn
   var date = new Date();
 try {
   conn = await oracledb.getConnection(connection)
   
-  const result = await conn.execute("INSERT INTO membresia VALUES(TEST_ID_SEQ.nextval, TO_DATE('"+date.toLocaleDateString()+"','DD/MM/YYYY'), "+datos["id"]+", 15)",{},{autoCommit:true})
+  const result = await conn.execute("INSERT INTO suscripcion VALUES(TEST_ID_SEQ.nextval, (SELECT id FROM equipo WHERE nombres='"+datos["equipo"]+"' and rownum = 1), "+datos["id"]+")",{},{autoCommit:true})
   
   console.log("aqui")
   
-  console.log('MEMBRESIA REGISTRADO CORRECTAMENTE');  
+  console.log('SUSCRIPCION REGISTRADO CORRECTAMENTE');  
   
 } catch (err) {
 

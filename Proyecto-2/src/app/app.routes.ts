@@ -24,6 +24,7 @@ import { RegistrarEstadioComponent } from "./components/registrar-estadio/regist
 import { RegistrarPartidoComponent } from "./components/registrar-partido/registrar-partido.component";
 import { RegistrarCompetenciaComponent } from "./components/registrar-competencia/registrar-competencia.component";
 import { MembresiaComponent } from "./components/membresia/membresia.component";
+import { SuscripcionComponent } from "./components/suscripcion/suscripcion.component";
 
 
 const APP_ROUTES: Routes = [
@@ -53,6 +54,7 @@ const APP_ROUTES: Routes = [
     {path: 'registrarCompetencia', component:RegistrarCompetenciaComponent},
     {path: 'registrarNoticia', component:NoticiasComponent},
     {path: 'membresiaC', component:MembresiaComponent},
+    {path: 'suscripciones', component:SuscripcionComponent},
     {path: '**', pathMatch:'full', redirectTo:'home'}
 ];
 

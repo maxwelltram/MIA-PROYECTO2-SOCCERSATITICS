@@ -37,4 +37,7 @@ export class UsuarioHomeComponent {
     Membresia(){
       this.router.navigate(['./membresiaC'])
     }
+    suscripcion(){
+      this.router.navigate(['./suscripciones'])
+    }
 }
