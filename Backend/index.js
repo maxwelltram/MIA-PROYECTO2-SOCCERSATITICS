@@ -91,9 +91,29 @@ app.post("/AddUser", (req,  res) =>{
 
 
     res.end();
-})
+});
 
-  
+})
+app.post("/AddMembresia", (req,  res) =>{ 
+  var body='';
+  var cadenaJson;
+  req.on('data', data =>{
+      body+=data;
+
+  });
+
+  req.on('end', ()=>{
+    console.log(body);
+    
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    insertarMembresia(cadenaJson);
+    res.status(200).send("ADD Membresia");
+
+
+    res.end();
+});
+
 })
 
 app.post("/ArchivosCarga", (req,  res) =>{ 
@@ -1442,8 +1462,7 @@ app.post("/cargarPartidoIncidencia", (req,  res) =>{
 
 
 app.listen(3000, (Request)=>(
-    console.log("servidor corriendo en el puerto",3000),
-    cargarArchivo("archivoEstadios.xlsx")
+    console.log("servidor corriendo en el puerto",3000)
 ));
 
 function cargarArchivo(ruta){
@@ -1455,6 +1474,35 @@ function cargarArchivo(ruta){
     console.log(libroSheets);
     return data;
 }
+
+
+
+
+
+
+async function insertarMembresia(datos){
+  let conn
+  var date = new Date();
+try {
+  conn = await oracledb.getConnection(connection)
+  
+  const result = await conn.execute("INSERT INTO membresia VALUES(TEST_ID_SEQ.nextval, TO_DATE('"+date.toLocaleDateString()+"','DD/MM/YYYY'), "+datos["id"]+", 15)",{},{autoCommit:true})
+  
+  console.log("aqui")
+  
+  console.log('MEMBRESIA REGISTRADO CORRECTAMENTE');  
+  
+} catch (err) {
+
+  console.log('Ouch!', err)
+  
+} finally {
+  if (conn) {
+    await conn.close()
+  }
+}
+}
+
 
 
 
@@ -2449,10 +2497,7 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
     return fecha.toLocaleDateString();
   }
 
-function consultaSelectUser(){
-    
 
-}
 
 
 function consultaSelectGenero(){
