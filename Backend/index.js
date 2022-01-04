@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");//instalar paquete npm install nodemail
 const app = express();
 const path = require('path');
 const convertCsvToXlsx = require('@aternus/csv-to-xlsx');
+const fs = require('fs');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -107,11 +108,9 @@ app.post("/ArchivosCarga", (req,  res) =>{
   req.on('end', ()=>{
     console.log(body);
     
-    cadenaJson= JSON.parse(body);
-    console.log(cadenaJson);
-    
-
-
+    fs.writeFileSync('archivo.csv', body);
+    fs.unlinkSync("archivoConv.xlsx");
+    convertir("archivo.csv")
     res.end();
 })
 
@@ -344,11 +343,11 @@ app.get("/", (req,  res) =>{
 )
 
 
-function convertir(){
+function convertir(archivo){
   
   var __dirname = path.dirname(require.main.filename);
-  let source = path.join(__dirname, 'archivoPartidos.csv');
-  let destination = path.join(__dirname, 'converted_report.xlsx');
+  let source = path.join(__dirname, archivo);
+  let destination = path.join(__dirname, 'archivoConv.xlsx');
   
   try {
     convertCsvToXlsx(source, destination);
@@ -1519,7 +1518,7 @@ async  function insertarEstadios(datos){
     try {
         conn = await oracledb.getConnection(connection)
     
-        const result = await conn.execute("INSERT INTO estadio VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_ing"], true)+"','DD/MM/YYYY') ,"+itemFile["Capacidad"]+" ,"+pais+" ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO estadio VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+itemFile["Fecha_ing"]+"','DD/MM/YYYY') ,"+itemFile["Capacidad"]+" ,"+pais+" ,'"+itemFile["Direccion"]+"','"+itemFile["Estado"]+"')",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
 
       } catch (err) {
@@ -1635,7 +1634,7 @@ async  function insertarDirectores(datos){
       try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute(
-          "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+          "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY')" 
         )
         console.log("aqui")
         console.log(result.rows[0])
@@ -1655,7 +1654,7 @@ async  function insertarDirectores(datos){
     if(!existeDir){
       try {
           conn = await oracledb.getConnection(connection)
-          const result = await conn.execute("INSERT INTO directort VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombres"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY') ,"+pais+", '"+itemFile["Estado"]+"', null )",{},{autoCommit:true})
+          const result = await conn.execute("INSERT INTO directort VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombres"]+"', TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY') ,"+pais+", '"+itemFile["Estado"]+"', null )",{},{autoCommit:true})
           console.log('Wow! Si inserte!')
       }catch (err) {
           console.log('Ouch! No inserte! Director', err)
@@ -1670,7 +1669,7 @@ async  function insertarDirectores(datos){
     try {
       conn = await oracledb.getConnection(connection)
       const result = await conn.execute(
-        "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+        "SELECT id FROM directort where nombres_apellidos='"+itemFile["Nombres"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY')" 
       )
       console.log("aqui")
       console.log(result.rows[0])
@@ -1686,7 +1685,7 @@ async  function insertarDirectores(datos){
     if(existe){
       try {
           conn = await oracledb.getConnection(connection)
-          const result = await conn.execute("INSERT INTO direccion VALUES (TEST_ID_SEQ.nextval, "+director+","+equipo+", TO_DATE('"+numeroAFecha(itemFile["Fecha_Ini"], true)+"','DD/MM/YYYY') ,TO_DATE('"+numeroAFecha(itemFile["Fecha_Fin"], true)+"','DD/MM/YYYY') )",{},{autoCommit:true})
+          const result = await conn.execute("INSERT INTO direccion VALUES (TEST_ID_SEQ.nextval, "+director+","+equipo+", TO_DATE('"+itemFile["Fecha_Ini"]+"','DD/MM/YYYY') ,TO_DATE('"+itemFile["Fecha_Fin"]+"','DD/MM/YYYY') )",{},{autoCommit:true})
           console.log('Wow! Si inserte!')
       }catch (err) {
           console.log('Ouch! No inserte! direccion', err)
@@ -1834,7 +1833,7 @@ async  function insertarEquipos(datos){
         try {
             conn = await oracledb.getConnection(connection)
         
-            const result = await conn.execute("INSERT INTO equipo VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Fun"], true)+"','DD/MM/YYYY') ,"+pais+", null )",{},{autoCommit:true})
+            const result = await conn.execute("INSERT INTO equipo VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+itemFile["Fecha_Fun"]+"','DD/MM/YYYY') ,"+pais+", null )",{},{autoCommit:true})
             console.log('Wow! Si inserte!')
     
           } catch (err) {
@@ -2005,7 +2004,7 @@ async  function insertarJugadores(datos){
     try {
       conn = await oracledb.getConnection(connection)
       const result = await conn.execute(
-        "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+        "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY')" 
       )
       console.log("aqui")
       console.log(result.rows[0])
@@ -2027,7 +2026,7 @@ async  function insertarJugadores(datos){
   if(!existeJug){
     try {
         conn = await oracledb.getConnection(connection)
-        const result = await conn.execute("INSERT INTO jugador VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY') ,"+pais+","+posicion+", null )",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO jugador VALUES (TEST_ID_SEQ.nextval, '"+itemFile["Nombre"]+"', TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY') ,"+pais+","+posicion+", null )",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
     }catch (err) {
         console.log('Ouch! No inserte! Jugador', err)
@@ -2042,7 +2041,7 @@ async  function insertarJugadores(datos){
   try {
     conn = await oracledb.getConnection(connection)
     const result = await conn.execute(
-      "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+numeroAFecha(itemFile["Fecha_Nac"], true)+"','DD/MM/YYYY')" 
+      "SELECT id FROM jugador where nombres_apellidos='"+itemFile["Nombre"]+"' and pais="+pais+" and fecha_nacimiento= TO_DATE('"+itemFile["Fecha_Nac"]+"','DD/MM/YYYY')" 
     )
     console.log("aqui")
     console.log(result.rows[0])
@@ -2058,11 +2057,11 @@ async  function insertarJugadores(datos){
   if(existe){
     try {
         conn = await oracledb.getConnection(connection)
-        const result = await conn.execute("INSERT INTO participante VALUES (TEST_ID_SEQ.nextval, "+jugador+","+equipo+", TO_DATE('"+numeroAFecha(itemFile["Fecha_Ini"], true)+"','DD/MM/YYYY') ,TO_DATE('"+numeroAFecha(itemFile["Fecha_Fin"], true)+"','DD/MM/YYYY') )",{},{autoCommit:true})
+        const result = await conn.execute("INSERT INTO participante VALUES (TEST_ID_SEQ.nextval, "+jugador+","+equipo+", TO_DATE('"+itemFile["Fecha_Ini"]+"','DD/MM/YYYY') ,TO_DATE('"+itemFile["Fecha_Fin"]+"','DD/MM/YYYY') )",{},{autoCommit:true})
         console.log('Wow! Si inserte!')
     }catch (err) {
         console.log('Ouch! No inserte! Participante', err)
-        console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
+        console.log(itemFile["Fecha_Fin"])
     }finally {
         if (conn) { 
             await conn.close()
@@ -2292,7 +2291,7 @@ async  function insertarCompetencias(datos){
   // id del director
   try {
     conn = await oracledb.getConnection(connection)
-    console.log("Anio "+numeroAFecha(itemFile["Año"]))
+    console.log("Anio "+itemFile["Año"])
     const result = await conn.execute(
       "SELECT id FROM competencia where nombre='"+itemFile["Nombre"]+"' and pais="+pais+" and anio="+itemFile["Año"]
       )
@@ -2341,7 +2340,7 @@ async  function insertarPartidos(datos){
       try {
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute(
-          "SELECT id FROM partido where fecha=TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
+          "SELECT id FROM partido where fecha=TO_DATE('"+itemFile["Fecha"]+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
         )
         console.log("aqui")
         console.log(result.rows[0])
@@ -2364,7 +2363,7 @@ async  function insertarPartidos(datos){
         conn = await oracledb.getConnection(connection)
         const result = await conn.execute(
           "insert into partido values( TEST_ID_SEQ.nextval,"+
-            "TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY'),"+
+            "TO_DATE('"+itemFile["Fecha"]+"','DD/MM/YYYY'),"+
            " (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais),"+
             
            " "+itemFile["Asistencia"]+", "+
@@ -2386,7 +2385,7 @@ async  function insertarPartidos(datos){
     try {
       conn = await oracledb.getConnection(connection)
       const result = await conn.execute(
-        "SELECT id FROM partido where fecha=TO_DATE('"+numeroAFecha(itemFile["Fecha"], true)+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
+        "SELECT id FROM partido where fecha=TO_DATE('"+itemFile["Fecha"]+"','DD/MM/YYYY') and estadio= (select estadio.id from estadio inner join pais on estadio.nombres='"+itemFile["Estadio"]+"' and pais.nombre='"+itemFile["Pais_Local"]+"' and pais.id=estadio.pais)" 
       )
       console.log("aqui")
       console.log(result.rows[0])
@@ -2408,7 +2407,7 @@ async  function insertarPartidos(datos){
       console.log('Wow! Si inserte!')
     }catch (err) {
       console.log('Ouch! No inserte! Participante..', err)
-      console.log(numeroAFecha(itemFile["Fecha_Fin"], true))
+      console.log(itemFile["Fecha_Fin"])
    }finally {
       if (conn) { 
           await conn.close()
