@@ -72,11 +72,7 @@ ngOnInit(): void {
     },(err)=>{
     console.log("no se pudo")
 
-<<<<<<< Updated upstream
     })
-=======
-    })*/
->>>>>>> Stashed changes
   }
 
   Recuperar(){
