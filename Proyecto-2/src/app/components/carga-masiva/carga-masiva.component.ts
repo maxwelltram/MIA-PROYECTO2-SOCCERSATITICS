@@ -31,11 +31,32 @@ export class CargaMasivaComponent implements OnInit {
     this.archivo= archivo
   }
   
-  subirArchivo(archivo: any, peticion: string) {
+  subirArchivo(archivo: any) {
     console.log(this.archivo)
-    this.service.uploadFile(this.archivo, peticion).subscribe(Response => {this.archivo});
+    this.service.uploadFile(this.archivo).subscribe(Response => {null});
+  }
+
+
+  jugadores(){
+    this.service.cargar("cargarJugadores").subscribe(Response => {null});
   }
   
+  directores(){
+    this.service.cargar("cargarDirectores").subscribe(Response => {null});
+  }
+  equipos(){
+    this.service.cargar("cargarEquipos").subscribe(Response => {null});
+  }
+  estadios(){
+    this.service.cargar("cargarEstadios").subscribe(Response => {null});
+  }
+  partidos(){
+    this.service.cargar("cargarPartidoIncidencia").subscribe(Response => {null});
+  }
+  competiciones(){
+    this.service.cargar("cargarCompeticiones").subscribe(Response => {null});
+  }
+
 Regresar(){
     this.router.navigate(['/empleadoHome'])
   }

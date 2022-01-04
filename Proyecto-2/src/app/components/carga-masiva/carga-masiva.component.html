@@ -7,25 +7,25 @@
       </div>
     <div class="input-group mb-3">
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile02">
+        <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="leerArchivo($event)">
         <label class="custom-file-label" for="inputGroupFile02">Escoger archivo</label>
       </div>
       <div class="input-group-append">
-        <span class="input-group-text" id="">Subir</span>
+        <span class="input-group-text" (click)="subirArchivo($event)" id="">Subir</span>
       </div>
     </div>
     <br>
-    <button type="submit" >Cargar jugadores </button>
+    <button type="submit" (click)="jugadores()"  >Cargar jugadores </button>
     <br>
-    <button type="submit" >Cargar equipos </button>
+    <button type="submit"(click)="equipos()" >Cargar equipos </button>
     <br>    
-    <button type="submit" >Cargar directores </button>
+    <button type="submit"(click)="directores()" >Cargar directores </button>
     <br>    
-    <button type="submit" >Cargar estadios </button>
+    <button type="submit" (click)="estadios()">Cargar estadios </button>
     <br>    
-    <button type="submit" >Cargar partidos </button>
+    <button type="submit"(click)="partidos()" >Cargar partidos </button>
     <br>    
-    <button type="submit" >Cargar competiciones </button>
+    <button type="submit" (click)="competiciones()">Cargar competiciones </button>
     <br>
     <br>
     <button type="submit" (click)='Regresar()'>Regresar</button>
