@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Router } from '@angular/router';
 import { UploadService } from 'src/app/services/upload.service';
 @Component({
@@ -8,10 +9,11 @@ import { UploadService } from 'src/app/services/upload.service';
 })
 export class CargaMasivaComponent implements OnInit {
 
-  constructor(
+  constructor(  
     private router: Router,
     public service: UploadService
   ) { }
+  
   ngOnInit(): void {
   }
   archivo:any
@@ -33,5 +35,8 @@ export class CargaMasivaComponent implements OnInit {
     console.log(this.archivo)
     this.service.uploadFile(this.archivo, peticion).subscribe(Response => {this.archivo});
   }
-
+  
+Regresar(){
+    this.router.navigate(['/empleadoHome'])
+  }
 }

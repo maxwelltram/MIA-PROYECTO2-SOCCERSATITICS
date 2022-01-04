@@ -1,0 +1,75 @@
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear estadio</h1>
+
+      <input
+      type="pais"
+      
+      name="pais"
+      placeholder="Pais"
+      required="required"
+      [(ngModel)]="pais"
+  
+  
+    />
+
+      <input
+      type="Nombre"
+      
+      name="nombre"
+      placeholder="Nombre"
+      required="required"
+      [(ngModel)]="nombre"
+    />
+
+  <input
+  type="fechac"
+
+  name="fechac"
+  placeholder="Fecha Creado"
+  required="required"
+[(ngModel)]="fechac"
+
+/>
+
+
+  <input
+  type="capacidad"
+
+  name="capacidad"
+  placeholder="Capacidad"
+  required="required"
+[(ngModel)]="capacidad"
+
+/>
+
+
+
+  <input
+  type="direccion"
+
+  name="direccion"
+  placeholder="Direccion"
+  required="required"
+[(ngModel)]="direccion"
+
+/>
+
+
+  <input
+  type="estado"
+  
+  name="estado"
+  placeholder="Estado"
+  required="required"
+  [(ngModel)]="estado"
+
+/>
+
+
+
+      <button type="submit" (click)='CrearEstadio()'>Registrar DT</button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>

@@ -30,6 +30,12 @@ import { NoticiasComponent } from './components/noticias/noticias.component';
 import { CrearUsuarioComponent } from './components/crear-usuario/crear-usuario.component';
 import { CargaMasivaComponent } from './components/carga-masiva/carga-masiva.component';
 import { NoticiasCliComponent } from './components/noticias-cli/noticias-cli.component';
+import { RegistrarJugadorComponent } from './components/registrar-jugador/registrar-jugador.component';
+import { RegistrarDTComponent } from './components/registrar-dt/registrar-dt.component';
+import { RegistrarEquipoComponent } from './components/registrar-equipo/registrar-equipo.component';
+import { RegistrarEstadioComponent } from './components/registrar-estadio/registrar-estadio.component';
+import { RegistrarPartidoComponent } from './components/registrar-partido/registrar-partido.component';
+import { RegistrarCompetenciaComponent } from './components/registrar-competencia/registrar-competencia.component';
 
 
 
@@ -57,6 +63,12 @@ import { NoticiasCliComponent } from './components/noticias-cli/noticias-cli.com
     CrearUsuarioComponent,
     CargaMasivaComponent,
     NoticiasCliComponent,
+    RegistrarJugadorComponent,
+    RegistrarDTComponent,
+    RegistrarEquipoComponent,
+    RegistrarEstadioComponent,
+    RegistrarPartidoComponent,
+    RegistrarCompetenciaComponent,
   ],
   imports: [
     BrowserModule,

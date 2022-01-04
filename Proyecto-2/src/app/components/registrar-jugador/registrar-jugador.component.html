@@ -1,0 +1,82 @@
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear jugador</h1>
+
+      <input
+      type="Nombre"
+      
+      name="nombre"
+      placeholder="Nombre"
+      required="required"
+      [(ngModel)]="nombre"
+    />
+    <input
+    type="Nacionalidad"
+    
+    name="Nacionalidad"
+    placeholder="Nacionalidad"
+    required="required"
+    [(ngModel)]="nacionalidad"
+
+
+  />
+
+      <input
+        type="Pais-Equipo"
+
+        name="Pais-Equipo"
+        placeholder="Pais-Equipo"
+        required="required"
+      [(ngModel)]="paisE"
+
+      />
+
+
+      <input
+      type="Equipo"
+      
+      name="Equipo"
+      placeholder="Equipo"
+      required="required"
+      [(ngModel)]="equipo"
+  
+    />
+
+      <input
+      type="FechaNac"
+      
+      name="FechaNac"
+      placeholder="Fecha Nacimiento"
+      required="required"
+      [(ngModel)]="fechanac"
+
+    />
+
+
+  <input
+  type="fechaini"
+  
+  name="fechaini"
+  placeholder="Fecha inicio"
+  required="required"
+  [(ngModel)]="fechaini"
+
+/>
+<input
+type="fechafin"
+
+name="fechafin"
+placeholder="Fecha fin"
+required="required"
+[(ngModel)]="fechafin"
+
+/>
+
+
+
+
+      <button type="submit" (click)='CrearJugador()'>Registrar jugador</button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>
