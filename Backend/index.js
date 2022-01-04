@@ -95,7 +95,28 @@ app.post("/AddUser", (req,  res) =>{
   
 })
 
+app.post("/ArchivosCarga", (req,  res) =>{ 
+  var body='';
+  var ruta;
+  var cadenaJson;
+  req.on('data', data =>{
+      body+=data;
 
+  });
+
+  req.on('end', ()=>{
+    console.log(body);
+    
+    cadenaJson= JSON.parse(body);
+    console.log(cadenaJson);
+    
+
+
+    res.end();
+})
+
+  
+})
 
 app.post("/AddNoticia", (req,  res) =>{ 
   var body='';
