@@ -5,23 +5,27 @@
         <h1>Lista de reportes</h1>
         <hr class="my-4">
       </div>
-    <button type="submit" >Reporte de usuarios suscritos a X equipo </button>
+      <input  type="x"  name="x" placeholder="x"  required="required"[(ngModel)]="varX"/>
+      <br>
+    <button type="submit" (click)="  usuariosSusEqui()" >Reporte de usuarios suscritos a X equipo </button>
     <br>
-    <button type="submit" >Reporte de usuarios con o sin membresía </button>
+    <button type="submit" (click)="  usuariosSinMem()">Reporte de usuarios sin membresía </button>
     <br>    
+    <button type="submit" (click)="  usuariosConMem()">Reporte de usuarios con membresía </button>
+    <br>   
     <button type="submit" >Reporte de usuarios que mas membresias han adquirido </button>
     <br>    
     <button type="submit" >Reporte de usuarios que mas dinero han gastado </button>
     <br>    
-    <button type="submit" >Reporte de usuarios de X país </button>
+    <button type="submit" (click)="  usuariosXpais()">Reporte de usuarios de X país </button>
     <br>    
-    <button type="submit" >Reporte de usuarios de X genero </button>
+    <button type="submit" (click)="  usuariosXgenero()">Reporte de usuarios de X genero </button>
     <br>    
     <button type="submit" >Reporte de usuarios con al menos X años de edad </button>
     <br>    
-    <button type="submit" >Reporte de empleados que MAS/MENOS noticias han publicado </button>
+    <button type="submit" (click)="  noticias()">Reporte de empleados que MAS/MENOS noticias han publicado </button>
     <br>    
-    <button type="submit" >Reporte de usuarios que MAS/MENOS noticias han publicado de X equipo </button>
+    <button type="submit" (click)="  noticiasEquipo()">Reporte de usuarios que MAS/MENOS noticias han publicado de X equipo </button>
     <br>    
     <button type="submit" >Reporte de bitacora de los administradores </button>
 
