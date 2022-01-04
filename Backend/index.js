@@ -1551,6 +1551,91 @@ app.post("/usuariosXgenero", (req,  res) =>{
 
 
 
+app.post("/empleadosNoticias", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['genero']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, COUNT(noticia.ID) AS noticias FROM NOTICIA INNER JOIN usuarios ON usuarios.id= noticia.EMPLEADO GROUP BY usuarios.NOMBRES    " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
+
+app.post("/empleadosNoticiasXequipo", (req,  res) =>{ 
+  var body='';
+  var nombre;
+  var cadenaJson;
+  //res.send("Cargar Estadios");
+  req.on('data', data =>{
+      body+=data;
+      cadenaJson = JSON.parse(body);
+      nombre = cadenaJson['nombre']
+
+  });
+  oracledb.getConnection(connection, function (err, connection) {
+    if (err) {
+        // Error connecting to DB
+        res.set('Content-Type', 'application/json');
+        res.status(500).send(JSON.stringify({
+            status: 500,
+            message: "Error connecting to DB",
+            detailed_message: err.message
+        }));
+        return;
+    }
+    connection.execute("SELECT usuarios.NOMBRES AS nombres, COUNT(noticia.ID) AS noticias FROM NOTICIA INNER JOIN usuarios ON usuarios.id= noticia.EMPLEADO INNER JOIN equipo ON noticia.EQUIPO = equipo.id WHERE equipo.NOMBRES = '"+nombre+"' GROUP BY usuarios.NOMBRES   " , {}, {
+        outFormat: oracledb.OBJECT // Return the result as Object
+    }, function (err, result) {
+        if (err) {
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error getting the dba_tablespaces",
+                detailed_message: err.message
+            }));
+        } else {
+          res.set('Content-Type', 'application/json');
+          usuarios = {usuarios:result.rows }
+          res.status(200).send(JSON.stringify(usuarios));
+        }
+        
+    });
+});
+
+});
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -48,3 +48,22 @@ SELECT * FROM directort inner join equipo on nombres= '"+nombre+"' inner join di
 
 -- noticias
 INSERT INTO noticia values(TEST_ID_SEQ.nextval, 'Jugadores se cayeron en el campo!', 'Los jugadores tuvieron una caida en el campo xd', (SELECT id FROM equipo WHERE nombres='Municipal' and rownum = 1), 1068)
+
+
+
+
+SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN SUSCRIPCION ON suscripcion.USUARIO = usuarios.id INNER JOIN EQUIPO ON equipo.ID = suscripcion.EQUIPO WHERE equipo.NOMBRES = 'Barcelona'
+
+
+SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios WHERE tipo = 3
+
+SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios WHERE tipo = 4
+
+
+SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN PAIS ON pais.id = usuarios.PAIS  WHERE pais.NOMBRE = 'Guatemala' AND (usuarios.TIPO = 3 or usuarios.TIPO = 4)
+
+
+SELECT usuarios.NOMBRES AS nombres, usuarios.APELLIDOS AS apellidos, usuarios.CORREO AS correo FROM usuarios INNER JOIN GENERO ON GENERO .id = usuarios.GENERO  WHERE GENERO .NOMBRE = 'M' AND (usuarios.TIPO = 3 or usuarios.TIPO = 4)
+
+
+SELECT usuarios.NOMBRES AS nombres, COUNT(noticia.ID) AS noticias FROM NOTICIA INNER JOIN usuarios ON usuarios.id= noticia.EMPLEADO INNER JOIN equipo ON noticia.EQUIPO = equipo.id WHERE equipo.NOMBRES = 'Barcelona' GROUP BY usuarios.NOMBRES
