@@ -34,4 +34,7 @@ export class UsuarioHomeComponent {
     MenuNoticias(){
       this.router.navigate(['./noticiasCli'])
     }
+    Membresia(){
+      this.router.navigate(['./membresiaC'])
+    }
 }
