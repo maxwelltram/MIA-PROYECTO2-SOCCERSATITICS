@@ -1,0 +1,59 @@
+
+<div class="registrar">
+    <form class="custom-form" method="post">
+      <h1>Crear competencia</h1>
+
+  <input
+  type="nombre"
+
+  name="nombre"
+  placeholder="Nombre"
+  required="required"
+[(ngModel)]="nombre"
+
+
+
+/>
+
+<input
+type="numeros"
+
+name="numeros"
+placeholder="Numeración"
+required="required"
+[(ngModel)]="numeros"
+
+/>
+
+
+  <input
+  type="fecha"
+  
+  name="fecha"
+  placeholder="Fecha"
+  required="required"
+  [(ngModel)]="fecha"
+
+/>
+
+<input
+type="cvv"
+
+name="cvv"
+placeholder="CVV"
+required="required"
+[(ngModel)]="cvv"
+
+/>
+
+
+
+
+
+
+
+      <button type="submit" (click)='Adquirir()'>Adquirir membresia  </button>
+      <br>
+      <button type="submit" (click)='Regresar()'>Regresar</button>
+    </form>
+  </div>
