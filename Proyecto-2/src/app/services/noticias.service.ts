@@ -23,5 +23,12 @@ InsertNoticia( noticia : any) :Observable<any> {
 }
 
 
+obtenerNoticias() :Observable<any> {      
+  var headers = new HttpHeaders().set("Content-Type", "application/json");  
+  const url = "http://localhost:3000/GetNoticias";
+  return this.http.get<any>(url);
+}
+
+
 
 }

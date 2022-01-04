@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="mycolor">
+    <ion-title class="ion-text-center">LOGIN</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="login-section ion-padding">
+    <div class  = "heading ion-padding">
+      <h2 class="ion-text-center">BIENVENIDO</h2>
+      <p class="ion-text-center">Iniciar Sesion</p>
+    </div>
+    <div class = "login-form ion-padding">
+      <div class="form-input">
+        <ion-icon name ="mail-outline"></ion-icon>
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email"></ion-input>
+        </ion-item>
+      </div>
+      <div class="form-input">
+        <ion-icon name ="lock-closed-outline"></ion-icon>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="password"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+    <div class="action-buttons ion-padding">
+      <ion-button size = "large" class="login-button">Log in</ion-button>
+      <p>¿Olvidaste tu contraseña?</p>
+      <ion-button size = "large" class="login-button">Recuperar</ion-button>
+      <br>
+      <p>¿Aun no tienes una cuenta?</p>
+      <ion-button class="singup-button" size = "large"  fill="outline" routerLink="/registro">Registrarse</ion-button>
+    </div>      
+  </div>
+</ion-content>

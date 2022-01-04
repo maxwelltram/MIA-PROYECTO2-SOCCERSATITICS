@@ -9,23 +9,38 @@
         
       </div>
 
-      <ng-container >
-      <table class="table table-striped table-dark">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Noticia</th>
+
+
+      <ng-container *ngIf="lista">
+        <table class="table table-striped table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Titulo</th>
+              <th scope="col">Equipo</th>
+              <th scope="col">Noticia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let noticia of lista; let i = index">
+              <td>
+                  {{i+1}}
+              </td> 
+              <td>
+                {{noticia.TITULO}}
+              </td>
+              <td>
+                {{noticia.EQUIPO}}
+              </td>
+              <td>
+                {{noticia.DETALLE}}
+              </td>
           </tr>
-        </thead>
-        <tbody>
-          <tr >
+          </tbody>
+        </table>
+  
+      </ng-container>
 
-        </tr>
-        </tbody>
-      </table>
-
-    </ng-container>
       <button type="submit" (click)="Regresar()" >Regresar</button>
       <br>
 
