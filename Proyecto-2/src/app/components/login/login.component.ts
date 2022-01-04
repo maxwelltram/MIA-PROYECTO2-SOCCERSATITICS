@@ -73,7 +73,6 @@ ngOnInit(): void {
     console.log("no se pudo")
 
     })
-    this.router.navigate(['/empleadoHome']);
     
   }
 
